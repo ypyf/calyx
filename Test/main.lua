@@ -1,0 +1,141 @@
+TWO_PI = math.pi*2
+mouseX = 10
+mouseY = 70
+stand1 = {}
+attack1 = {}
+run1 = {}
+
+function loadImageRes(template, n)
+    res = {}
+    for i = 1, n do
+        file = string.format('res/'..template, i)
+        print('load resource '..file)
+        res[i] = loadImage(file)
+    end
+    return res
+end
+
+function setup()
+    print("hello world")
+    x = 0.1
+    background(108, 108, 208)
+    attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
+    run1    = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
+    stand1  = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
+end
+
+count1 = 1
+count2 = 1
+count3 = 1
+speed = 0
+step = 9   -- 奔跑速度
+posX = 0    -- 角色位置
+
+function draw()
+    -- 控制动画速度
+    if speed > 9 then
+        count1 = count1 + 1
+        count2 = count2 + 1
+        count3 = count3 + 1
+        speed = 1
+        posX = posX + step
+        if posX > calyx.conf.app.width then
+            posX = -100
+        end
+    end
+
+    -- 重置动画帧指针
+    if count1 > 5 then
+        count1 = 1
+    end
+
+    if count2 > 8 then
+        count2 = 1
+    end
+
+    if count3 > 4 then
+        count3 = 1
+    end
+
+    -- 绘制动画
+    image(run1[count2], posX, 200)
+
+    image(attack1[count1], 300, 500)
+
+    pushMatrix()
+    scale(1)
+    image(stand1[count3], 300, 200)
+    popMatrix()
+
+    pushMatrix()
+
+    translate(100, 100)
+    popMatrix()
+
+    pushMatrix()
+    fps = string.format("%0.2f", frameRate)
+    text('帧率: '..fps, 10, 100)
+    popMatrix()
+
+    --angle = string.format("%0.2f", x/math.pi*180)
+    --text('旋转角度: '..angle, 10, 10)
+    text("操作系统: "..calyx.os, 10, 10)
+    text('屏幕宽度: '..screen.width, 10, 30)
+    text('屏幕高度: '..screen.height, 10, 50)
+
+    --translate(100, 100)
+
+    --pushMatrix()
+    --rotate(0.3)
+    --text("文字效果", 330, 150)
+    --popMatrix()
+
+    text(string.format("第 %d 帧", count2), posX, mouseY)
+end
+
+function update(dt)
+    -- 更新帧率相关的变量
+    speed = speed + 1
+    x = (x + 0.02)%TWO_PI  
+end
+
+function mousepressed(x, y, button)
+    if button == "right" then
+        mouseX = x
+        mouseY = y
+        --translate(x, y)
+    end
+    print(button.." "..x.." "..y)
+end
+
+function mouserelease(x, y, button)
+end
+
+triggerPause = true
+
+function keypressed(key, isrepeat)
+    --io.write(key)
+    if key == " " then
+        if triggerPause then
+            calyx.event.post("pause")
+            triggerPause = false
+        else
+            calyx.event.post("run")
+            triggerPause = true
+        end
+    elseif key == 'c' then
+        math.randomseed(os.time())
+        math.random(); math.random(); math.random()
+        r = math.random(0, 255)
+        g = math.random(0, 255)
+        b = math.random(0, 255)
+        print(string.format('set background color %.0f %.0f %.0f', r, g, b))
+        background(r, g, b)
+    elseif key == 'q' then
+        calyx.event.post("quit")
+    end
+
+    if isrepeat then
+        --print('repeat keystroke')
+    end
+end

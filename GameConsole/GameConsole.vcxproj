@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{31463BF9-8FD5-4C8E-B1BF-697E27383409}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GameConsole</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\include;$(WindowsSdkDir)include;D:\Program Files %28x86%29\Microsoft DirectX SDK %28August 2007%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;D:\Program Files %28x86%29\Microsoft DirectX SDK %28August 2007%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <SourcePath>$(SolutionDir)\3rd\;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)\include;$(WindowsSdkDir)include;D:\Program Files %28x86%29\Microsoft DirectX SDK %28August 2007%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;D:\Program Files %28x86%29\Microsoft DirectX SDK %28August 2007%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <SourcePath>$(SolutionDir)\3rd\;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>lualib_debug.lib;d3d9.lib;d3dx9.lib;winmm.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>lualib.lib;d3d9.lib;d3dx9.lib;winmm.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="MatrixStack.cpp" />
+    <ClCompile Include="modules.cpp" />
+    <ClCompile Include="modules\array\array.cpp" />
+    <ClCompile Include="modules\core\core.cpp" />
+    <ClCompile Include="modules\event\event.cpp" />
+    <ClCompile Include="Calyx.cpp" />
+    <ClCompile Include="modules\processing\processing.cpp" />
+    <ClCompile Include="stringUtils.cpp" />
+    <ClCompile Include="TexCube.cpp" />
+    <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SpriteAnimator.h" />
+    <ClInclude Include="MatrixStack.h" />
+    <ClInclude Include="modules.h" />
+    <ClInclude Include="modules\array\array.h" />
+    <ClInclude Include="modules\core\core.h" />
+    <ClInclude Include="modules\event\event.h" />
+    <ClInclude Include="modules\processing\processing.h" />
+    <ClInclude Include="calyx.h" />
+    <ClInclude Include="SpriteBatch.h" />
+    <ClInclude Include="stringUtils.h" />
+    <ClInclude Include="TexCube.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="basic_types.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="d3dUtil.h" />
+    <ClInclude Include="keyboard.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="typesystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameConsole.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\crosshair.cur" />
+    <None Include="res\directx.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

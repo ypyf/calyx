@@ -1,4 +1,4 @@
-calyx
+Calyx
 =====
 
-Lua game engine
+A Lua 3D Game Engine
