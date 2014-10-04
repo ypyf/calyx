@@ -27,15 +27,16 @@ typedef int (*LuaGlueFunction)(lua_State*L);
 
 namespace calyx
 {
-	extern const char* CALYX_VER;
-	extern int luax_preload(lua_State *L, lua_CFunction f, const char *name);
-
     struct UserData
     {
         virtual void GC()=0;
     };
 
-    extern int create_userdata(lua_State *L, void *val, size_t size);
+	extern const char* CALYX_VER;
+
+	int luax_preload(lua_State *L, lua_CFunction f, const char *name);
+
+    int create_userdata(lua_State *L, void *val, size_t size);
 
 } // namespace calyx
 

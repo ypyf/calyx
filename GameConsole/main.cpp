@@ -1,7 +1,6 @@
 ﻿//////////////////////////////////////
 // Entry Point
 //////////////////////////////////////
-#if 1
 #include "Game.h"
 
 using namespace std;
@@ -19,4 +18,3 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		return 1;
 	return game.Run();
 }
-#endif
