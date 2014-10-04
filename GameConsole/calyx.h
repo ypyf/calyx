@@ -23,7 +23,7 @@
 
 #include <lua.hpp>
 
-typedef int (*LuaGlueFunction)(lua_State*L) throw(...);
+typedef int (*LuaGlueFunction)(lua_State*L);
 
 namespace calyx
 {
