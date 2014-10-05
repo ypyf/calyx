@@ -69,6 +69,9 @@
     <ClCompile Include="modules.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MyModels.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basic_types.h">
@@ -123,6 +126,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SpriteAnimator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyModels.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

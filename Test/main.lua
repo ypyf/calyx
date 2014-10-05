@@ -1,3 +1,5 @@
+local ps = require 'calyx.processing'
+
 TWO_PI = math.pi*2
 mouseX = 10
 mouseY = 70
@@ -18,6 +20,7 @@ end
 function setup()
     print("hello world")
     x = 0.1
+	print(ps.loadImage)
     background(108, 108, 208)
     attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
     run1    = loadImageRes('sz_001006_Run_02_00%02d.png', 8)

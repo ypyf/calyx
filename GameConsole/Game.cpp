@@ -4,81 +4,7 @@
 #include "Game.h"
 #include "Calyx.h"
 #include "modules.h"
-
-// 贴图
-//(0,0)-----(0,1)
-//
-//
-//
-//(1,0)-----(1,1)
-namespace
-{
-    d3d::VertexNormTex verts[24] =
-    {
-        // 正面顶点数据  
-        {-0.25f,  0.25f, -0.25f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f},
-        { 0.25f,  0.25f, -0.25f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f},  
-        { 0.25f, -0.25f, -0.25f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f},  
-        {-0.25f, -0.25f, -0.25f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f},  
-
-        // 背面顶点数据  
-        { 0.25f,  0.25f, 0.25f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f}, 
-        {-0.25f,  0.25f, 0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f}, 
-        {-0.25f, -0.25f, 0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f}, 
-        { 0.25f, -0.25f, 0.25f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f},  
-
-        // 顶面顶点数据  
-        {-0.25f, 0.25f,  0.25f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f},  
-        { 0.25f, 0.25f,  0.25f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f},  
-        { 0.25f, 0.25f, -0.25f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f},  
-        {-0.25f, 0.25f, -0.25f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},  
-
-        // 底面顶点数据  
-        {-0.25f, -0.25f, -0.25f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f}, 
-        { 0.25f, -0.25f, -0.25f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f}, 
-        { 0.25f, -0.25f,  0.25f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f}, 
-        {-0.25f, -0.25f,  0.25f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f},  
-
-        // 左侧面顶点数据  
-        {-0.25f,  0.25f,  0.25f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f}, 
-        {-0.25f,  0.25f, -0.25f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f}, 
-        {-0.25f, -0.25f, -0.25f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f}, 
-        {-0.25f, -0.25f,  0.25f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f}, 
-
-        // 右侧面顶点数据  
-        {0.25f,  0.25f, -0.25f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f}, 
-        {0.25f,  0.25f,  0.25f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f}, 
-        {0.25f, -0.25f,  0.25f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f}, 
-        {0.25f, -0.25f, -0.25f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f}, 
-    };
-
-    WORD indices[36] =
-    {
-        // 正面索引数据  
-        0, 1, 2,  
-        0, 2, 3,  
-
-        // 背面索引数据  
-        4, 5, 6,  
-        4, 6, 7,  
-
-        // 顶面索引数据  
-        8, 9, 10,  
-        8, 10, 11,  
-
-        // 底面索引数据  
-        12, 13, 14,  
-        12, 14, 15,  
-
-        // 左侧面索引数据  
-        16, 17, 18,  
-        16, 18, 19,  
-
-        // 右侧面索引数据  
-        20, 21, 22,  
-        20, 22, 23,  
-    };
-}
+#include "MyModels.h"
 
 namespace
 {
@@ -403,7 +329,7 @@ int D3D9Application::InitLua()
 
     // 预加载核心模块
     // 安装内建模块预载入过程
-    preload_builtin_modules(L);
+    init_modules(L);
 
     // 指示引擎当前在独立模式下运行（.exe模式）
     //{
@@ -528,7 +454,14 @@ int D3D9Application::InitLua()
 int D3D9Application::Run()
 {
     // 载入脚本
-    luaL_dofile(L, "main.lua");
+    int ret = luaL_dofile(L, "main.lua");
+    if (ret != 0)
+    {
+        TCHAR message[1024];
+        wsprintf(message, TEXT("%s\n"), ansi_to_unicode(lua_tostring(L,-1)));
+        MessageBox(NULL, message, TEXT("Calyx"), MB_OK|MB_ICONSTOP);
+        return false;
+    }
 
     // 调用入口函数
     lua_getglobal(L, "setup");
@@ -649,10 +582,10 @@ void D3D9Application::Draw()
 
 bool D3D9Application::AcquireDeviceResources()
 {
-    m_pDevice->CreateVertexBuffer(NELEM(verts) * sizeof(d3d::VertexNormTex), 0, 
+    m_pDevice->CreateVertexBuffer(24 * sizeof(d3d::VertexNormTex), 0, 
         d3d::VertexNormTex::FVF, D3DPOOL_MANAGED, &m_pVB, NULL);
 
-    m_pDevice->CreateIndexBuffer(NELEM(indices) * sizeof(DWORD),
+    m_pDevice->CreateIndexBuffer(36 * sizeof(DWORD),
         D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_pIB, NULL);
 
     return true;

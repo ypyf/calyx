@@ -4,28 +4,23 @@
 #include "modules/array/array.h"
 #include "modules/event/event.h"
 #include "modules/processing/processing.h"
+#include "Game.h"
 
-static const luaL_Reg modules[] = {
+using namespace calyx;
+
+static luaL_Reg modules[] = {
 	//{ "calyx.event", luaopen_calyx_event },
-	{ "calyx.core", luaopen_calyx_core },
-	{ "calyx.array", luaopen_calyx_array },
+	{"calyx.core", luaopen_calyx_core},
+	{"calyx.array", luaopen_calyx_array},
 	{"calyx.processing", luaopen_calyx_processing},
-	{
-		NULL, NULL
-	}
+	{NULL, NULL}
 };
 
 
-int preload_builtin_modules(lua_State *L)
+int init_modules(lua_State *L/*, D3D9Application* app*/)
 {
-	for (int i = 0; modules[i].name != 0; i++)
-	{
-		calyx::luax_preload(L, modules[i].func, modules[i].name);
-	}
-
-	// 载入核心模块
-	lua_getglobal(L, "require");
-	lua_pushstring(L, "calyx.core");
-	lua_call(L, 1, 0);
+    // 添加模块载入程序到表package.preload
+    luax_preload_modules(L, modules);
+    luax_require_module(L, "calyx.core");   // 载入核心模块
 	return 1;
 }

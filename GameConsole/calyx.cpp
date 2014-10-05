@@ -5,16 +5,6 @@ namespace calyx
 {
 	const char* CALYX_VER = "0.0.1";
 
-	int luax_preload(lua_State *L, lua_CFunction f, const char *name)
-	{
-		lua_getglobal(L, "package");
-		lua_getfield(L, -1, "preload");
-		lua_pushcfunction(L, f);
-		lua_setfield(L, -2, name);
-		lua_pop(L, 2);
-		return 0;
-	}
-
     // 释放userdata对象
     static int userdata_gc_method(lua_State *L) 
     {
@@ -34,6 +24,29 @@ namespace calyx
         lua_pushcfunction(L, userdata_gc_method); /* push gc method. */
         lua_rawset(L, -3);    /* metatable['__gc'] = userdata_gc_method */
         lua_setmetatable(L, -2); /* set the userdata's metatable. */
+        return 1;
+    }
+
+    int luax_preload_modules(lua_State *L, luaL_Reg modules[])
+    {
+        // 添加模块载入程序到表package.preload
+        for (int i = 0; modules[i].name != 0; i++)
+        {
+            lua_getglobal(L, "package");
+            lua_getfield(L, -1, "preload");
+            lua_pushcfunction(L, modules[i].func);
+            lua_setfield(L, -2, modules[i].name);
+            lua_pop(L, 2);
+        }
+        return 1;
+    }
+
+    // require 'xxx'
+    int luax_require_module(lua_State *L, const char *module)
+    {
+        lua_getglobal(L, "require");
+        lua_pushstring(L, module);
+        lua_call(L, 1, 0);
         return 1;
     }
 }

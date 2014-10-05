@@ -8,7 +8,7 @@ extern "C"
 {
 #endif
 
-	CALYX_EXPORT int preload_builtin_modules(lua_State *L);
+	CALYX_EXPORT int init_modules(lua_State *L/*, D3D9Application* app*/);
 
 #ifdef __cplusplus
 }

@@ -34,8 +34,8 @@ namespace calyx
 
 	extern const char* CALYX_VER;
 
-	int luax_preload(lua_State *L, lua_CFunction f, const char *name);
-
+	int luax_preload_modules(lua_State *L, luaL_Reg modules[]);
+    int luax_require_module(lua_State *L, const char *module);
     int create_userdata(lua_State *L, void *val, size_t size);
 
 } // namespace calyx

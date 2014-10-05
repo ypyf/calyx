@@ -16,5 +16,5 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	D3D9Application game;
 	if (!game.Init(hInstance))
 		return 1;
-	return game.Run();
+	game.Run();
 }

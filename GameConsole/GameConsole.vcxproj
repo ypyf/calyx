@@ -93,12 +93,14 @@
     <ClCompile Include="modules\event\event.cpp" />
     <ClCompile Include="Calyx.cpp" />
     <ClCompile Include="modules\processing\processing.cpp" />
+    <ClCompile Include="MyModels.cpp" />
     <ClCompile Include="stringUtils.cpp" />
     <ClCompile Include="TexCube.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyModels.h" />
     <ClInclude Include="SpriteAnimator.h" />
     <ClInclude Include="MatrixStack.h" />
     <ClInclude Include="modules.h" />

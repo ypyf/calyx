@@ -9,6 +9,7 @@
 
 namespace d3d
 {
+
 	class Color
 	{
 	public:
