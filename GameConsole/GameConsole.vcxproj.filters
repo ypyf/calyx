@@ -28,7 +28,7 @@
     <Filter Include="模块\processing">
       <UniqueIdentifier>{cceafabf-48e6-40a2-8736-fda71981f8f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="模块\ui">
+    <Filter Include="模块\gui">
       <UniqueIdentifier>{a279a56f-ea05-4fde-9aaa-322397cade14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
