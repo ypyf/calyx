@@ -19,8 +19,9 @@ static luaL_Reg modules[] = {
 
 int init_modules(lua_State *L/*, D3D9Application* app*/)
 {
-    // 添加模块载入程序到表package.preload
-    luax_preload_modules(L, modules);
-    luax_require_module(L, "calyx.core");   // 载入核心模块
+    // 添加模块loader到package.preload表中
+    for (size_t i = 0; modules[i].name != NULL; i++)
+        luax_preload_module(L, modules[i]);
+    luax_require_module(L, "calyx.core");
 	return 1;
 }

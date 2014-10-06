@@ -57,66 +57,8 @@ static int calyx_lua_frameRate(lua_State *L)
     return 1;  /* number of results */
 }
 
-#define CALYX_IMAGE_MODE_CORNER	0
-#define CALYX_IMAGE_MODE_CENTER 1
 
-struct ImageData : UserData
-{
-    IDirect3DTexture9* tex;
-    D3DXIMAGE_INFO info;
-    void GC() override
-    {
-        tex->Release();
-    }
-};
 
-// 载入图片纹理，返回一个Image对象
-static int calyx_lua_loadImage(lua_State *L)
-{
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    TCHAR* file = ansi_to_unicode(luaL_optstring(L, 1, ""));
-    IDirect3DTexture9* tex;
-    D3DXIMAGE_INFO image_info;
-    D3DXGetImageInfoFromFile(file, &image_info);
-    create_texture_from_file(self->m_pDevice, file, &tex);
-    ImageData image;
-    image.tex = tex;
-    image.info = image_info;
-    return create_userdata(L, &image, sizeof(ImageData));
-}
-
-// 绘制纹理
-static int calyx_lua_image(lua_State *L)
-{
-    static D3DXVECTOR3 centre;    // 精灵中心点(0代表左上角)
-    static D3DXVECTOR3 position;  // 精灵的位置(0代表左上角)
-
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    int args = 1;
-    ImageData* pImage = (ImageData*)lua_touserdata(L, args++);
-
-    // 计算图片中心点距左上角的偏移
-    float centerX = pImage->info.Width / 2.f;
-    float cneterY = pImage->info.Height / 2.f;
-
-    //if (pImage->mode == CALYX_IMAGE_MODE_CORNER)
-    //{
-    // 使图片中心点出现在指定的位置上
-    position.x = (float)luaL_optnumber(L, args++, 0) - centerX;
-    position.y = (float)luaL_optnumber(L, args++, 0) - cneterY;
-    //}
-    //else
-    //{
-    // 使图片绕自身中心旋转
-    //centre.x = position.x + centerX;
-    //centre.y = position.y + cneterY;
-    //}
-    self->m_pSprite->SetTransform(self->m_matrixStack.top());       
-    self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-    self->m_pSprite->Draw(pImage->tex, NULL, &centre, &position, D3DCOLOR_RGBA(255,255,255,255));  
-    self->m_pSprite->End();  
-    return 0;
-}
 
 // 设置背景色
 // 有下列重载形式
@@ -266,28 +208,7 @@ static int calyx_lua_translate(lua_State *L)
     return 0;
 }
 
-// 输出文字
-static int calyx_lua_processing_text(lua_State *L)
-{
-    static RECT rc0 = {0, 0, 0, 0};
-    int n = lua_gettop(L);
-    int args = 1;
-    if (n >= 3) {
-        TCHAR *text = ansi_to_unicode(luaL_optstring(L, args++, ""));
-        int x = (int)luaL_optnumber(L, args++, 0);
-        int y = (int)luaL_optnumber(L, args++, 0);
-        rc0.left = x;
-        rc0.top = y;
-        // 创建字体Sprite TODO 放入Game类中
-        D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-        self->m_pSprite->SetTransform(self->m_matrixStack.top());
-        self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
-        self->m_font->DrawText(self->m_pSprite, text, -1, &rc0, DT_NOCLIP, d3d::Color::White);
-        self->m_pSprite->End();
-        free(text);
-    }
-    return 0;
-}
+
 
 // 事件处理程序
 // TODO 事件队列
@@ -307,17 +228,6 @@ static int calyx_lua_event_post(lua_State *L)
             self->Quit();
         }
     }
-    return 0;
-}
-
-static int calyx_lua_printf(lua_State *L) 
-{
-    lua_pushvalue(L, lua_upvalueindex(2));
-    lua_insert(L, 1);
-    lua_call(L, lua_gettop(L) - 1, 1);
-    lua_pushvalue(L, lua_upvalueindex(1));
-    lua_pushvalue(L, -2);
-    lua_call(L, 1, 0);
     return 0;
 }
 
@@ -360,15 +270,12 @@ int D3D9Application::InitLua()
     // 截断过长的标题
     m_sAppTitle = m_sAppTitle.substr(0, 128);
 
+    // 将this指针保存到Lua注册表
+    lua_pushlightuserdata(L, this);
+    lua_setfield(L, LUA_REGISTRYINDEX, "thisapp");
+
     // 加入printf函数
-    lua_getglobal(L, "io");
-    lua_getglobal(L, "string");
-    lua_pushliteral(L, "write");
-    lua_gettable(L, -3);
-    lua_pushliteral(L, "format");
-    lua_gettable(L, -3);
-    lua_pushcclosure(L, calyx_lua_printf, 2);
-    lua_setglobal(L, "printf");
+    luaopen_printf(L);
 
     // 事件管理系统
     // event.post = c_event_post
@@ -400,17 +307,6 @@ int D3D9Application::InitLua()
     //lua_pushcclosure(L, calyx_lua_size, 1);
     //lua_setglobal(L, "size");
 
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_processing_text, 1);
-    lua_setglobal(L, "text");
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_loadImage, 1);
-    lua_setglobal(L, "loadImage");
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_image, 1);
-    lua_setglobal(L, "image");
 
     lua_pushlightuserdata(L, this);
     lua_pushcclosure(L, calyx_lua_pushMatrix, 1);
@@ -453,7 +349,7 @@ int D3D9Application::InitLua()
 
 int D3D9Application::Run()
 {
-    // 载入脚本
+    // 载入游戏脚本
     int ret = luaL_dofile(L, "main.lua");
     if (ret != 0)
     {
@@ -564,6 +460,7 @@ void D3D9Application::Draw()
     // 重置变换矩阵
     m_matrixStack.loadIdentity();
 
+    // 调用Lua绘图函数
     lua_getglobal(L, "draw");
     lua_pcall(L, 0, 0, 0);
 

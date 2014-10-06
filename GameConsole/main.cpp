@@ -17,4 +17,5 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	if (!game.Init(hInstance))
 		return 1;
 	game.Run();
+    return 0;
 }

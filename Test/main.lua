@@ -1,4 +1,5 @@
 local ps = require 'calyx.processing'
+--require 'module1'
 
 TWO_PI = math.pi*2
 mouseX = 10
@@ -12,15 +13,14 @@ function loadImageRes(template, n)
     for i = 1, n do
         file = string.format('res/'..template, i)
         print('load resource '..file)
-        res[i] = loadImage(file)
+        res[i] = ps.loadImage(file)
     end
     return res
 end
 
 function setup()
-    print("hello world")
+    printf("hello world\n")
     x = 0.1
-	print(ps.loadImage)
     background(108, 108, 208)
     attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
     run1    = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
@@ -61,13 +61,13 @@ function draw()
     end
 
     -- 绘制动画
-    image(run1[count2], posX, 200)
+    ps.image(run1[count2], posX, 200)
 
-    image(attack1[count1], 300, 500)
+    ps.image(attack1[count1], 300, 500)
 
     pushMatrix()
     scale(1)
-    image(stand1[count3], 300, 200)
+    ps.image(stand1[count3], 300, 200)
     popMatrix()
 
     pushMatrix()
@@ -77,14 +77,14 @@ function draw()
 
     pushMatrix()
     fps = string.format("%0.2f", frameRate)
-    text('帧率: '..fps, 10, 100)
+    ps.text('帧率: '..fps, 10, 100)
     popMatrix()
 
     --angle = string.format("%0.2f", x/math.pi*180)
     --text('旋转角度: '..angle, 10, 10)
-    text("操作系统: "..calyx.os, 10, 10)
-    text('屏幕宽度: '..screen.width, 10, 30)
-    text('屏幕高度: '..screen.height, 10, 50)
+    ps.text("操作系统: "..calyx.os, 10, 10)
+    ps.text('屏幕宽度: '..screen.width, 10, 30)
+    ps.text('屏幕高度: '..screen.height, 10, 50)
 
     --translate(100, 100)
 
@@ -93,7 +93,7 @@ function draw()
     --text("文字效果", 330, 150)
     --popMatrix()
 
-    text(string.format("第 %d 帧", count2), posX, mouseY)
+    ps.text(string.format("第 %d 帧", count2), posX, mouseY)
 end
 
 function update(dt)

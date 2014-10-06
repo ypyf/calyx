@@ -1,6 +1,8 @@
 #include "calyx.h"
 #include <memory.h>
 
+// Definition of global function and symbols
+
 namespace calyx
 {
 	const char* CALYX_VER = "0.0.1";
@@ -27,17 +29,14 @@ namespace calyx
         return 1;
     }
 
-    int luax_preload_modules(lua_State *L, luaL_Reg modules[])
+    int luax_preload_module(lua_State *L, luaL_Reg module)
     {
         // 添加模块载入程序到表package.preload
-        for (int i = 0; modules[i].name != 0; i++)
-        {
-            lua_getglobal(L, "package");
-            lua_getfield(L, -1, "preload");
-            lua_pushcfunction(L, modules[i].func);
-            lua_setfield(L, -2, modules[i].name);
-            lua_pop(L, 2);
-        }
+        lua_getglobal(L, "package");
+        lua_getfield(L, -1, "preload");
+        lua_pushcfunction(L, module.func);
+        lua_setfield(L, -2, module.name);
+        lua_pop(L, 2);
         return 1;
     }
 
@@ -48,5 +47,31 @@ namespace calyx
         lua_pushstring(L, module);
         lua_call(L, 1, 0);
         return 1;
+    }
+
+    static int l_printf(lua_State *L) 
+    {
+        lua_pushvalue(L, lua_upvalueindex(2));  // retrieve string.format
+        lua_insert(L, 1);
+        lua_call(L, lua_gettop(L) - 1, 1);
+        lua_pushvalue(L, lua_upvalueindex(1));  // retrieve io.write
+        lua_pushvalue(L, -2);
+        lua_call(L, 1, 0);
+        return 0;
+    }
+
+    // register lua function 'printf'
+    int luaopen_printf(lua_State *L)
+    {
+        lua_getglobal(L, "io");
+        lua_getglobal(L, "string");
+        lua_pushliteral(L, "write");
+        lua_gettable(L, -3);    // push io.write
+        lua_pushliteral(L, "format");
+        lua_gettable(L, -3);    // push string.format
+        lua_pushcclosure(L, l_printf, 2);
+        /* With 5.1, I'd probably just return 1 at this point */
+        lua_setglobal(L, "printf");
+        return 0;
     }
 }

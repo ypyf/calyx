@@ -94,7 +94,10 @@ protected:
 private:
 	GameTime* m_pTimer;
     //D3DXMATRIX view;
+    
+    // lua stuff
     lua_State* L;
+    //int m_refThis;  // 保存在Lua注册表中的this指针的引用
 
     bool m_bWireFrame;
     bool m_bLight;
