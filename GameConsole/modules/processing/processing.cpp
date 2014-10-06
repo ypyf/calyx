@@ -60,13 +60,11 @@ static void init_module(lua_State *L)
 {
     ps.image_mode = CALYX_IMAGE_MODE_CORNER;
 
-    // 设置模块环境的元表
+    // 创建模块环境元表
     lua_newtable(L);
     lua_pushstring(L, "__index");
-    //lua_pushlightuserdata(L, (void*)thisApp(L));	// 保存this指针
     lua_pushcfunction(L, module_env_index);
     lua_rawset(L, -3);
-    //lua_setmetatable(L, LUA_ENVIRONINDEX);
     lua_setmetatable(L, LUA_ENVIRONINDEX);
 }
 
