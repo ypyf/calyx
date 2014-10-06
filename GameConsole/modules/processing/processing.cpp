@@ -27,11 +27,6 @@ struct ImageData : UserData
 
 static PState ps;
 
-static void init_module()
-{
-    ps.image_mode = CALYX_IMAGE_MODE_CORNER;
-}
-
 static D3D9Application* thisApp(lua_State *L)
 {
     lua_getfield(L, LUA_REGISTRYINDEX, "thisapp");
@@ -39,6 +34,40 @@ static D3D9Application* thisApp(lua_State *L)
     // TODO throw exception
     assert(self != NULL);
     return self;
+}
+
+
+// 全局(模块)环境钩子
+// __index(table, key)
+static int module_env_index(lua_State *L)
+{
+    luaL_checktype(L, 1, LUA_TTABLE);
+    const char* index = luaL_optstring(L, 2, "");
+    if (!strcmp("frameRate", index))
+    {
+        D3D9Application* self = thisApp(L);
+        lua_pushnumber(L, self->get_frame_rate());
+        return 1;
+    }
+    else
+    {
+        // TODO throw
+        return luaL_error(L, "引用用了未定义的变量 '%s'\n", index);
+    }
+}
+
+static void init_module(lua_State *L)
+{
+    ps.image_mode = CALYX_IMAGE_MODE_CORNER;
+
+    // 设置模块环境的元表
+    lua_newtable(L);
+    lua_pushstring(L, "__index");
+    //lua_pushlightuserdata(L, (void*)thisApp(L));	// 保存this指针
+    lua_pushcfunction(L, module_env_index);
+    lua_rawset(L, -3);
+    //lua_setmetatable(L, LUA_ENVIRONINDEX);
+    lua_setmetatable(L, LUA_ENVIRONINDEX);
 }
 
 static int l_imageMode(lua_State *L)
@@ -122,14 +151,143 @@ static int l_text(lua_State *L)
     return 0;
 }
 
+// 矩阵栈操作 -------------------
+
+// TODO 检查push深度
+static int l_pushMatrix(lua_State *L)
+{
+    thisApp(L)->m_matrixStack.push();
+    return 0;
+}
+
+static int l_popMatrix(lua_State *L)
+{
+    thisApp(L)->m_matrixStack.pop();
+    return 0;
+}
+
+// rotate(angle)
+static int l_rotate(lua_State *L)
+{
+    int n = lua_gettop(L);
+    int args = 1;
+    D3D9Application* self = thisApp(L);
+    if (n == 1) {
+        // 角度在0到2pi之间
+        double angle = luaL_optnumber(L, args++, 0.0);
+        D3DXMATRIX Rz;
+        D3DXVECTOR3 v(0, 0, 1.0f);
+        // 默认绕Z轴旋转
+        //D3DXMatrixRotationAxis(&Rz, &v, (FLOAT)angle);
+        D3DXMatrixRotationZ(&Rz, (FLOAT)angle);
+        self->m_matrixStack.multMatrix(&Rz);
+    }
+    return 0;
+}
+
+static int l_scale(lua_State *L)
+{
+    int n = lua_gettop(L);
+    int args = 1;
+    D3D9Application* self = thisApp(L);
+    if (n == 1) {
+        double s = luaL_optnumber(L, args++, 0.0);
+        self->m_matrixStack.scale(s, s, s);
+    } else if (n == 2) {
+        double x, y;
+        x = luaL_optnumber(L, args++, 0.0);
+        y = luaL_optnumber(L, args++, 0.0);
+        self->m_matrixStack.scale(x, y, 1.0);
+    } else if (n >= 3) {
+        double x, y, z;
+        x = luaL_optnumber(L, args++, 0.0);
+        y = luaL_optnumber(L, args++, 0.0);
+        z = luaL_optnumber(L, args++, 0.0);
+        self->m_matrixStack.scale(x, y, z);
+    } else {
+        self->m_matrixStack.scale(1.0, 1.0, 1.0);
+    }
+    return 0;
+}
+
+static int l_translate(lua_State *L)
+{
+    int n = lua_gettop(L);
+    int args = 1;
+    D3D9Application* self = thisApp(L);
+    /*    if (n == 1) {
+    double x;
+    x = luaL_optnumber(L, args++, 0.0);
+    self->m_matrixStack.translate(x, 0.0, 0.0);
+    } else*/ if (n == 2) {
+        double x, y;
+        x = luaL_optnumber(L, args++, 0.0);
+        y = luaL_optnumber(L, args++, 0.0);
+        self->m_matrixStack.translate(x, y, 0.0);
+    } else if (n >= 3) {
+        double x, y, z;
+        x = luaL_optnumber(L, args++, 0.0);
+        y = luaL_optnumber(L, args++, 0.0);
+        z = luaL_optnumber(L, args++, 0.0);
+        self->m_matrixStack.translate(x, y, z);
+    } else {
+        self->m_matrixStack.translate(0.0, 0.0, 0.0);
+    }
+    return 0;
+}
+
+// 设置背景色
+// 有下列重载形式
+// bg(rgb)
+// ??bg(num, num)
+// bg(r, g, b)
+// bg(r, g, b, a)
+// bg(image), image:string
+// TODO 目前只考虑了RGB颜色模式
+static int l_background(lua_State *L)
+{
+    int n = lua_gettop(L);
+    int args = 1;
+    D3D9Application* self = thisApp(L);
+
+    // 如果参数只有一个，则存在两种算法
+    // 一种是将一个整数按位分解为RGB三个分量
+    // 另一种是Processing中采用的，将这个整数作为三个相同的分量
+    if (n == 1) {
+        int v = (int)luaL_optnumber(L, args++, 0);
+        // integer => (r, g, b)
+        //int red = (rgb >> 16) & 0xFF;
+        //int green = (rgb >> 8) & 0xFF;
+        //int blue = rgb & 0xFF;
+        self->m_bgcolor = D3DCOLOR_ARGB(255, v, v, v);
+    } else if (n == 3) {
+        // RGB分量 0~255
+        int v1 = (int)luaL_optnumber(L, args++, 0);
+        int v2 = (int)luaL_optnumber(L, args++, 0);
+        int v3 = (int)luaL_optnumber(L, args++, 0);
+        self->m_bgcolor = D3DCOLOR_ARGB(255, v1, v2, v3);
+    } else if (n >= 4) {
+        // RGBA分量 0~255
+        int v1 = (int)luaL_optnumber(L, args++, 0);
+        int v2 = (int)luaL_optnumber(L, args++, 0);
+        int v3 = (int)luaL_optnumber(L, args++, 0);
+        int alpha = (int)luaL_optnumber(L, args++, 0);
+        self->m_bgcolor = D3DCOLOR_ARGB(alpha, v1, v2, v3);
+    }
+
+    return 0;
+}
+
+
 static const struct luaL_reg processinglib[] =
 {
-	//{"scale", scale},
-	//{"rotate", rotate},
-	//{"pushMatrix", getsize},
-	//{"popMatrix", getsize},
+	{"scale", l_scale},
+	{"rotate", l_rotate},
+    {"translate", l_translate},
+	{"pushMatrix", l_pushMatrix},
+	{"popMatrix", l_popMatrix},
 	//{"frameRate", getsize},
-	//{"popMatrix", getsize},
+    {"background", l_background},
     {"loadImage", l_loadImage},
     {"image",     l_image},
 	{"imageMode", l_imageMode},
@@ -139,7 +297,7 @@ static const struct luaL_reg processinglib[] =
 
 extern "C" int luaopen_calyx_processing(lua_State *L)
 {
-    init_module();
+    init_module(L);
 	luaL_openlib(L, "processing", processinglib, 0);
 	return 1;
 }

@@ -21,7 +21,7 @@ end
 function setup()
     printf("hello world\n")
     x = 0.1
-    background(108, 108, 208)
+    ps.background(108, 108, 208)
     attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
     run1    = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
     stand1  = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
@@ -65,20 +65,20 @@ function draw()
 
     ps.image(attack1[count1], 300, 500)
 
-    pushMatrix()
-    scale(1)
+    ps.pushMatrix()
+    ps.scale(1)
     ps.image(stand1[count3], 300, 200)
-    popMatrix()
+    ps.popMatrix()
 
-    pushMatrix()
+    ps.pushMatrix()
 
-    translate(100, 100)
-    popMatrix()
+    ps.translate(100, 100)
+    ps.popMatrix()
 
-    pushMatrix()
+    ps.pushMatrix()
     fps = string.format("%0.2f", frameRate)
     ps.text('Ö¡ÂÊ: '..fps, 10, 100)
-    popMatrix()
+    ps.popMatrix()
 
     --angle = string.format("%0.2f", x/math.pi*180)
     --text('Ðý×ª½Ç¶È: '..angle, 10, 10)
@@ -133,7 +133,7 @@ function keypressed(key, isrepeat)
         g = math.random(0, 255)
         b = math.random(0, 255)
         print(string.format('set background color %.0f %.0f %.0f', r, g, b))
-        background(r, g, b)
+        ps.background(r, g, b)
     elseif key == 'q' then
         calyx.event.post("quit")
     end

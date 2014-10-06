@@ -71,3 +71,43 @@ WORD indices[36] =
     20, 21, 22,  
     20, 22, 23,  
 };
+
+// 立方体模型
+D3DXVECTOR4 cube_vertices[] = {
+    // AD
+    D3DXVECTOR4(0.05f, 0.0f, 0.45f, 1.0f), 
+    D3DXVECTOR4(0.05f, 0.0f, 0.35f, 1.0f),
+    // DC
+    D3DXVECTOR4(0.05f, 0.0f, 0.35f, 1.0f),
+    D3DXVECTOR4(0.15f, 0.0f, 0.35f, 1.0f),
+    // CB
+    D3DXVECTOR4(0.15f, 0.0f, 0.35f, 1.0f),
+    D3DXVECTOR4(0.15f, 0.0f, 0.45f, 1.0f),
+    // BA
+    D3DXVECTOR4(0.15f, 0.0f, 0.45f, 1.0f),
+    D3DXVECTOR4(0.05f, 0.0f, 0.45f, 1.0f),
+    // AE
+    D3DXVECTOR4(0.05f, 0.0f, 0.45f, 1.0f),
+    D3DXVECTOR4(0.05f, 0.1f, 0.45f, 1.0f),
+    // EF
+    D3DXVECTOR4(0.05f, 0.1f, 0.45f, 1.0f),
+    D3DXVECTOR4(0.15f, 0.1f, 0.45f, 1.0f),
+    // FB
+    D3DXVECTOR4(0.15f, 0.1f, 0.45f, 1.0f),
+    D3DXVECTOR4(0.15f, 0.0f, 0.45f, 1.0f),
+    // EH
+    D3DXVECTOR4(0.05f, 0.1f, 0.45f, 1.0f),
+    D3DXVECTOR4(0.05f, 0.1f, 0.35f, 1.0f),
+    // HG
+    D3DXVECTOR4(0.05f, 0.1f, 0.35f, 1.0f),
+    D3DXVECTOR4(0.15f, 0.1f, 0.35f, 1.0f),
+    // GF
+    D3DXVECTOR4(0.15f, 0.1f, 0.35f, 1.0f),
+    D3DXVECTOR4(0.15f, 0.1f, 0.45f, 1.0f),
+    // GC
+    D3DXVECTOR4(0.15f, 0.1f, 0.35f, 1.0f),
+    D3DXVECTOR4(0.15f, 0.0f, 0.35f, 1.0f),
+    // HD
+    D3DXVECTOR4(0.05f, 0.1f, 0.35f, 1.0f),
+    D3DXVECTOR4(0.05f, 0.0f, 0.35f, 1.0f)
+};

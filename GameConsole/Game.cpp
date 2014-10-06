@@ -29,139 +29,6 @@ D3D9Application::~D3D9Application()
 
 }
 
-// 全局环境钩子
-// __index(table, key)
-static int global_env_hook(lua_State *L)
-{
-    luaL_checktype(L, 1, LUA_TTABLE);
-    const char* index = luaL_optstring(L, 2, "");
-    if (!strcmp("frameRate", index))
-    {
-        D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-        lua_pushnumber(L, self->m_fps);
-    }
-    else
-    {
-        // TODO 有好的错误处理
-        printf("error: 引用用了未定义的变量 %s\n", index);
-        lua_pushnil(L);
-    }
-    return 1;
-}
-
-// 获取帧率
-static int calyx_lua_frameRate(lua_State *L)
-{
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    lua_pushnumber(L, self->m_fps);  /* push result */
-    return 1;  /* number of results */
-}
-
-
-
-
-// 设置背景色
-// 有下列重载形式
-// bg(rgb)
-// ??bg(num, num)
-// bg(r, g, b)
-// bg(r, g, b, a)
-// bg(image), image:string
-// TODO 目前只考虑了RGB颜色模式
-static int calyx_lua_background(lua_State *L)
-{
-    int n = lua_gettop(L);
-    int args = 1;
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-
-    // 如果参数只有一个，则存在两种算法
-    // 一种是将一个整数按位分解为RGB三个分量
-    // 另一种是Processing中采用的，将这个整数作为三个相同的分量
-    if (n == 1) {
-        int v = (int)luaL_optnumber(L, args++, 0);
-        // integer => (r, g, b)
-        //int red = (rgb >> 16) & 0xFF;
-        //int green = (rgb >> 8) & 0xFF;
-        //int blue = rgb & 0xFF;
-        self->m_bgcolor = D3DCOLOR_ARGB(255, v, v, v);
-    } else if (n == 3) {
-        // RGB分量 0~255
-        int v1 = (int)luaL_optnumber(L, args++, 0);
-        int v2 = (int)luaL_optnumber(L, args++, 0);
-        int v3 = (int)luaL_optnumber(L, args++, 0);
-        self->m_bgcolor = D3DCOLOR_ARGB(255, v1, v2, v3);
-    } else if (n >= 4) {
-        // RGBA分量 0~255
-        int v1 = (int)luaL_optnumber(L, args++, 0);
-        int v2 = (int)luaL_optnumber(L, args++, 0);
-        int v3 = (int)luaL_optnumber(L, args++, 0);
-        int alpha = (int)luaL_optnumber(L, args++, 0);
-        self->m_bgcolor = D3DCOLOR_ARGB(alpha, v1, v2, v3);
-    }
-
-    return 0;
-}
-
-// 矩阵栈操作 -------------------
-
-// TODO 检查push深度
-static int calyx_lua_pushMatrix(lua_State *L)
-{
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    self->m_matrixStack.push();
-    return 0;
-}
-
-static int calyx_lua_popMatrix(lua_State *L)
-{
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    self->m_matrixStack.pop();
-    return 0;
-}
-
-// rotate(angle)
-static int calyx_lua_rotate(lua_State *L)
-{
-    int n = lua_gettop(L);
-    int args = 1;
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    if (n == 1) {
-        // 角度在0到2pi之间
-        double angle = luaL_optnumber(L, args++, 0.0);
-        D3DXMATRIX Rz;
-        D3DXVECTOR3 v(0, 0, 1.0f);
-        // 默认绕Z轴旋转
-        //D3DXMatrixRotationAxis(&Rz, &v, (FLOAT)angle);
-        D3DXMatrixRotationZ(&Rz, (FLOAT)angle);
-        self->m_matrixStack.multMatrix(&Rz);
-    }
-    return 0;
-}
-
-static int calyx_lua_scale(lua_State *L)
-{
-    int n = lua_gettop(L);
-    int args = 1;
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    if (n == 1) {
-        double s = luaL_optnumber(L, args++, 0.0);
-        self->m_matrixStack.scale(s, s, s);
-    } else if (n == 2) {
-        double x, y;
-        x = luaL_optnumber(L, args++, 0.0);
-        y = luaL_optnumber(L, args++, 0.0);
-        self->m_matrixStack.scale(x, y, 1.0);
-    } else if (n >= 3) {
-        double x, y, z;
-        x = luaL_optnumber(L, args++, 0.0);
-        y = luaL_optnumber(L, args++, 0.0);
-        z = luaL_optnumber(L, args++, 0.0);
-        self->m_matrixStack.scale(x, y, z);
-    } else {
-        self->m_matrixStack.scale(1.0, 1.0, 1.0);
-    }
-    return 0;
-}
 
 #if 0
 static int calyx_lua_size(lua_State *L)
@@ -181,33 +48,6 @@ static int calyx_lua_size(lua_State *L)
     return 0;
 }
 #endif
-
-static int calyx_lua_translate(lua_State *L)
-{
-    int n = lua_gettop(L);
-    int args = 1;
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
-    /*    if (n == 1) {
-    double x;
-    x = luaL_optnumber(L, args++, 0.0);
-    self->m_matrixStack.translate(x, 0.0, 0.0);
-    } else*/ if (n == 2) {
-        double x, y;
-        x = luaL_optnumber(L, args++, 0.0);
-        y = luaL_optnumber(L, args++, 0.0);
-        self->m_matrixStack.translate(x, y, 0.0);
-    } else if (n >= 3) {
-        double x, y, z;
-        x = luaL_optnumber(L, args++, 0.0);
-        y = luaL_optnumber(L, args++, 0.0);
-        z = luaL_optnumber(L, args++, 0.0);
-        self->m_matrixStack.translate(x, y, z);
-    } else {
-        self->m_matrixStack.translate(0.0, 0.0, 0.0);
-    }
-    return 0;
-}
-
 
 
 // 事件处理程序
@@ -307,43 +147,6 @@ int D3D9Application::InitLua()
     //lua_pushcclosure(L, calyx_lua_size, 1);
     //lua_setglobal(L, "size");
 
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_pushMatrix, 1);
-    lua_setglobal(L, "pushMatrix");
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_popMatrix, 1);
-    lua_setglobal(L, "popMatrix");
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_popMatrix, 1);
-    lua_setglobal(L, "popMatrix"); 
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_scale, 1);
-    lua_setglobal(L, "scale"); 
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_rotate, 1);
-    lua_setglobal(L, "rotate");
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_translate, 1);
-    lua_setglobal(L, "translate");
-
-    lua_pushlightuserdata(L, this);
-    lua_pushcclosure(L, calyx_lua_background, 1);
-    lua_setglobal(L, "background");
-
-    // 设置全局环境元表
-    lua_newtable(L);
-    lua_pushstring(L, "__index");
-    lua_pushlightuserdata(L, this);	// 保存this指针
-    lua_pushcclosure(L, global_env_hook, 1);
-    lua_rawset(L, -3);
-    lua_setmetatable(L, LUA_GLOBALSINDEX);
-
     return 1;
 }
 
@@ -402,45 +205,6 @@ void D3D9Application::Update(float dt)
     lua_pcall(L, 1, 0, 0);
 }
 
-// 立方体模型
-D3DXVECTOR4 cube_vertices[] = {
-    // AD
-    D3DXVECTOR4(0.05f, 0.0f, 0.45f, 1.0f), 
-    D3DXVECTOR4(0.05f, 0.0f, 0.35f, 1.0f),
-    // DC
-    D3DXVECTOR4(0.05f, 0.0f, 0.35f, 1.0f),
-    D3DXVECTOR4(0.15f, 0.0f, 0.35f, 1.0f),
-    // CB
-    D3DXVECTOR4(0.15f, 0.0f, 0.35f, 1.0f),
-    D3DXVECTOR4(0.15f, 0.0f, 0.45f, 1.0f),
-    // BA
-    D3DXVECTOR4(0.15f, 0.0f, 0.45f, 1.0f),
-    D3DXVECTOR4(0.05f, 0.0f, 0.45f, 1.0f),
-    // AE
-    D3DXVECTOR4(0.05f, 0.0f, 0.45f, 1.0f),
-    D3DXVECTOR4(0.05f, 0.1f, 0.45f, 1.0f),
-    // EF
-    D3DXVECTOR4(0.05f, 0.1f, 0.45f, 1.0f),
-    D3DXVECTOR4(0.15f, 0.1f, 0.45f, 1.0f),
-    // FB
-    D3DXVECTOR4(0.15f, 0.1f, 0.45f, 1.0f),
-    D3DXVECTOR4(0.15f, 0.0f, 0.45f, 1.0f),
-    // EH
-    D3DXVECTOR4(0.05f, 0.1f, 0.45f, 1.0f),
-    D3DXVECTOR4(0.05f, 0.1f, 0.35f, 1.0f),
-    // HG
-    D3DXVECTOR4(0.05f, 0.1f, 0.35f, 1.0f),
-    D3DXVECTOR4(0.15f, 0.1f, 0.35f, 1.0f),
-    // GF
-    D3DXVECTOR4(0.15f, 0.1f, 0.35f, 1.0f),
-    D3DXVECTOR4(0.15f, 0.1f, 0.45f, 1.0f),
-    // GC
-    D3DXVECTOR4(0.15f, 0.1f, 0.35f, 1.0f),
-    D3DXVECTOR4(0.15f, 0.0f, 0.35f, 1.0f),
-    // HD
-    D3DXVECTOR4(0.05f, 0.1f, 0.35f, 1.0f),
-    D3DXVECTOR4(0.05f, 0.0f, 0.35f, 1.0f)
-};
 
 // 绘图函数
 void D3D9Application::Draw()
@@ -938,4 +702,9 @@ LRESULT D3D9Application::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
     }
 
     return result;
+}
+
+double D3D9Application::get_frame_rate() const
+{
+    return m_fps;
 }

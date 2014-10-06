@@ -37,11 +37,12 @@ public:
     virtual void Pause(bool status);
 	virtual void Quit();
 
+    double get_frame_rate() const;
+
     ID3DXFont *m_font;
     MatrixStack m_matrixStack;
     IDirect3DDevice9* m_pDevice;
     ID3DXSprite *m_pSprite;
-    double m_fps;
     D3DCOLOR m_bgcolor; // ±³¾°É«
 
 protected:
@@ -92,6 +93,7 @@ protected:
     bool setWindowSize(int cx, int cy);
 
 private:
+    double m_fps;
 	GameTime* m_pTimer;
     //D3DXMATRIX view;
     
