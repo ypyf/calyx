@@ -25,8 +25,6 @@ struct ImageData : UserData
     }
 };
 
-static PState ps;
-
 static D3D9Application* thisApp(lua_State *L)
 {
     lua_getfield(L, LUA_REGISTRYINDEX, "thisapp");
@@ -36,6 +34,13 @@ static D3D9Application* thisApp(lua_State *L)
     return self;
 }
 
+static PState* get_pstate(lua_State *L)
+{
+    lua_getfield(L, LUA_ENVIRONINDEX, "ps");
+    PState* pps = (PState*)lua_touserdata(L, -1);
+    assert(pps != NULL);
+    return pps;
+}
 
 // 全局(模块)环境钩子
 // __index(table, key)
@@ -58,7 +63,10 @@ static int module_env_index(lua_State *L)
 
 static void init_module(lua_State *L)
 {
+    static PState ps;
     ps.image_mode = CALYX_IMAGE_MODE_CORNER;
+    lua_pushlightuserdata(L, &ps);
+    lua_setfield(L, LUA_ENVIRONINDEX, "ps");
 
     // 创建模块环境元表
     lua_newtable(L);
@@ -72,7 +80,7 @@ static int l_imageMode(lua_State *L)
 {
 	int args = 1;
 	int mode = (int)luaL_optnumber(L, args++, 0);
-	ps.image_mode = mode;
+	get_pstate(L)->image_mode = mode;
 	return 0;
 }
 
@@ -277,25 +285,24 @@ static int l_background(lua_State *L)
 }
 
 
-static const struct luaL_reg processinglib[] =
+static const struct luaL_reg exports[] =
 {
-	{"scale", l_scale},
-	{"rotate", l_rotate},
-    {"translate", l_translate},
-	{"pushMatrix", l_pushMatrix},
-	{"popMatrix", l_popMatrix},
-	//{"frameRate", getsize},
-    {"background", l_background},
-    {"loadImage", l_loadImage},
-    {"image",     l_image},
-	{"imageMode", l_imageMode},
-    {"text",      l_text},
-	{NULL,        NULL}
+    {"scale",       l_scale},
+    {"rotate",      l_rotate},
+    {"translate",   l_translate},
+    {"pushMatrix",  l_pushMatrix},
+    {"popMatrix",   l_popMatrix},
+    {"background",  l_background},
+    {"loadImage",   l_loadImage},
+    {"image",       l_image},
+    {"imageMode",   l_imageMode},
+    {"text",        l_text},
+    {NULL,          NULL}
 };
 
 extern "C" int luaopen_calyx_processing(lua_State *L)
 {
     init_module(L);
-	luaL_openlib(L, "processing", processinglib, 0);
+	luaL_openlib(L, "processing", exports, 0);
 	return 1;
 }

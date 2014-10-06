@@ -1,4 +1,5 @@
 local ps = require 'calyx.processing'
+local loadImage = ps.loadImage
 --require 'module1'
 
 TWO_PI = math.pi*2
@@ -13,7 +14,7 @@ function loadImageRes(template, n)
     for i = 1, n do
         file = string.format('res/'..template, i)
         print('load resource '..file)
-        res[i] = ps.loadImage(file)
+        res[i] = loadImage(file)
     end
     return res
 end
