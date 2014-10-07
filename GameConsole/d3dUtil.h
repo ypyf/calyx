@@ -85,7 +85,6 @@ inline void create_texture_from_file(LPDIRECT3DDEVICE9 device, LPCTSTR file, LPD
 		D3DX_DEFAULT,
 		0,0,0,
 		texture);
-								
 }
 
 //
