@@ -17,7 +17,7 @@ static luaL_Reg modules[] = {
 };
 
 
-int init_modules(lua_State *L/*, D3D9Application* app*/)
+int init_modules(lua_State *L)
 {
     // 添加模块loader到package.preload表中
     for (size_t i = 0; modules[i].name != NULL; i++)
