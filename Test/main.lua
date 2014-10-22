@@ -1,5 +1,6 @@
 local ps = require 'calyx.processing'
 local loadImage = ps.loadImage
+
 --require 'module1'
 
 TWO_PI = math.pi*2
@@ -25,8 +26,8 @@ function setup()
     --ps.background(108, 108, 208)
 	ps.background(30, 82, 150)
     attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
-    run1    = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
-    stand1  = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
+       run1 = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
+     stand1 = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
 end
 
 count1 = 1
