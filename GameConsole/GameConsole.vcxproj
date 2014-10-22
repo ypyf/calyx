@@ -119,6 +119,7 @@
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Timeline.h" />
     <ClInclude Include="typesystem.h" />
   </ItemGroup>
   <ItemGroup>

@@ -134,6 +134,9 @@
     <ClInclude Include="Exception.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Timeline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameConsole.rc">
