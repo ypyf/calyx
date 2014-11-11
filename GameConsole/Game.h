@@ -17,11 +17,11 @@ struct lua_State;
 
 namespace calyx {
 
-class D3D9Application
+class D3D9Console
 {
 public:
-	D3D9Application();
-	virtual ~D3D9Application();
+	D3D9Console();
+	virtual ~D3D9Console();
 
 	// Main event loop
 	int Run();

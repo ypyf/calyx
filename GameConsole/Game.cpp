@@ -8,7 +8,7 @@
 
 namespace
 {
-    calyx::D3D9Application* g_pApp;
+    calyx::D3D9Console* g_pApp;
 
     // non-member window procedure
     LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -19,12 +19,12 @@ namespace
 
 using namespace calyx;
 
-D3D9Application::D3D9Application()
+D3D9Console::D3D9Console()
 {
 
 }
 
-D3D9Application::~D3D9Application()
+D3D9Console::~D3D9Console()
 {
 
 }
@@ -58,7 +58,7 @@ static int calyx_lua_event_post(lua_State *L)
     int args = 1;
     if (n >= args) {
         std::string event = luaL_optstring(L, args++, "");
-        D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
+        D3D9Console* self = (D3D9Console*)lua_touserdata(L, lua_upvalueindex(1));
         assert(self != NULL);
         if ("pause" == event) {
             self->Pause(true);
@@ -72,7 +72,7 @@ static int calyx_lua_event_post(lua_State *L)
 }
 
 
-int D3D9Application::InitLua()
+int D3D9Console::InitLua()
 {
     L = luaL_newstate();
     luaL_openlibs(L);
@@ -150,7 +150,7 @@ int D3D9Application::InitLua()
     return 1;
 }
 
-int D3D9Application::Run()
+int D3D9Console::Run()
 {
     // 载入游戏脚本
     int ret = luaL_dofile(L, "main.lua");
@@ -198,7 +198,7 @@ int D3D9Application::Run()
     return (int)(msg.wParam);
 }
 
-void D3D9Application::Update(float dt)
+void D3D9Console::Update(float dt)
 {
     lua_getglobal(L, "update");
     lua_pushnumber(L, dt);
@@ -207,7 +207,7 @@ void D3D9Application::Update(float dt)
 
 
 // 绘图函数
-void D3D9Application::Draw()
+void D3D9Console::Draw()
 {
     // 处理设备丢失
     if (m_bHandleDeviceLost)
@@ -241,7 +241,7 @@ void D3D9Application::Draw()
     }
 }
 
-bool D3D9Application::AcquireDeviceResources()
+bool D3D9Console::AcquireDeviceResources()
 {
     m_pDevice->CreateVertexBuffer(24 * sizeof(d3d::VertexNormTex), 0, 
         d3d::VertexNormTex::FVF, D3DPOOL_MANAGED, &m_pVB, NULL);
@@ -252,21 +252,21 @@ bool D3D9Application::AcquireDeviceResources()
     return true;
 }
 
-void D3D9Application::ReleaseDeviceResources()
+void D3D9Console::ReleaseDeviceResources()
 {
     SafeRelease(&m_pVB);
     SafeRelease(&m_pIB);
     SafeRelease(&m_pSprite);
 }
 
-bool D3D9Application::OnLostDevice()
+bool D3D9Console::OnLostDevice()
 {
     m_pSprite->OnLostDevice();
     return true;
 }
 
 // 进行设备丢失后的恢复
-bool D3D9Application::OnResetDevice()
+bool D3D9Console::OnResetDevice()
 {
     m_pSprite->OnResetDevice();
     ResetGraphicsState();
@@ -274,7 +274,7 @@ bool D3D9Application::OnResetDevice()
 }
 
 // 设置图形设备状态
-bool D3D9Application::ResetGraphicsState()
+bool D3D9Console::ResetGraphicsState()
 {
     // 创建并设置视图矩阵
     D3DXVECTOR3 eye (1.5f, 0.75f, -1); //近乎于iso
@@ -304,7 +304,7 @@ bool D3D9Application::ResetGraphicsState()
 }
 
 // 初始化图形子系统
-bool D3D9Application::InitGraphics()
+bool D3D9Console::InitGraphics()
 {
     // 从配置中读取窗口客户区大小
     // TODO  考虑把它移入其它函数
@@ -353,17 +353,17 @@ bool D3D9Application::InitGraphics()
     return true;
 }
 
-void D3D9Application::Pause(bool status)
+void D3D9Console::Pause(bool status)
 {
     m_bSuspended = status;
 }
 
-void D3D9Application::Quit()
+void D3D9Console::Quit()
 {
     ::PostQuitMessage(0);
 }
 
-int D3D9Application::Init(HINSTANCE hInstance)
+int D3D9Console::Init(HINSTANCE hInstance)
 {
     m_bWireFrame = false;
     m_bLight = true;
@@ -396,7 +396,7 @@ int D3D9Application::Init(HINSTANCE hInstance)
     return true;
 }
 
-bool D3D9Application::CreateApplicationWindow(int cx, int cy)
+bool D3D9Console::CreateApplicationWindow(int cx, int cy)
 {
     static const TCHAR window_class_name[] = TEXT("D3D9Game Window CLass");
 
@@ -458,7 +458,7 @@ bool D3D9Application::CreateApplicationWindow(int cx, int cy)
     return true;
 }
 
-bool D3D9Application::setWindowSize(int cx, int cy)
+bool D3D9Console::setWindowSize(int cx, int cy)
 {
     // 只改变窗口大小
     SetWindowPos(m_hAppWindow, 0, 0, 0, cx, cy, SWP_NOMOVE | SWP_NOZORDER);
@@ -466,7 +466,7 @@ bool D3D9Application::setWindowSize(int cx, int cy)
 }
 
 // See http://en.wikibooks.org/wiki/DirectX/9.0/Direct3D/Initialization
-bool D3D9Application::InitDirect3D()
+bool D3D9Console::InitDirect3D()
 {
     HRESULT hr;
     BOOL windowed = TRUE;
@@ -592,14 +592,14 @@ bool D3D9Application::InitDirect3D()
     return true;
 }
 
-void D3D9Application::Shutdown()
+void D3D9Console::Shutdown()
 {
     lua_close(L);
     ReleaseDeviceResources();
     SafeDelete(&m_pTimer);
 }
 
-void D3D9Application::CalculateFPS(float dt)
+void D3D9Console::CalculateFPS(float dt)
 {
     static int frameCnt;
     static float elapsedTime;
@@ -618,7 +618,7 @@ void D3D9Application::CalculateFPS(float dt)
 }
 
 // 设备丢失后重置设备
-void D3D9Application::TryResetDevice()
+void D3D9Console::TryResetDevice()
 {
     HRESULT hr;
 
@@ -652,7 +652,7 @@ void D3D9Application::TryResetDevice()
     }
 }
 
-LRESULT D3D9Application::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT result = 0;
     switch (msg)
@@ -704,7 +704,7 @@ LRESULT D3D9Application::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
     return result;
 }
 
-double D3D9Application::get_frame_rate() const
+double D3D9Console::get_frame_rate() const
 {
     return m_fps;
 }

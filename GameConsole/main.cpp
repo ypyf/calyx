@@ -11,10 +11,8 @@
 int APIENTRY
 _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
-	using namespace std;
 	using namespace calyx;
-
 	SetCurrentDirectory(TEXT("../Test"));
-	D3D9Application game;
-	game.Init(hInstance) && game.Run();
+	D3D9Console console;
+	console.Init(hInstance) && console.Run();
 }

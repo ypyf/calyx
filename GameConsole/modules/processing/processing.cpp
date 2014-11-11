@@ -25,10 +25,10 @@ struct ImageData : UserData
     }
 };
 
-static D3D9Application* thisApp(lua_State *L)
+static D3D9Console* thisApp(lua_State *L)
 {
     lua_getfield(L, LUA_REGISTRYINDEX, "thisapp");
-    D3D9Application* self = (D3D9Application*)lua_touserdata(L, -1);
+    D3D9Console* self = (D3D9Console*)lua_touserdata(L, -1);
     // TODO throw exception
     assert(self != NULL);
     return self;
@@ -50,7 +50,7 @@ static int module_env_index(lua_State *L)
     const char* index = luaL_optstring(L, 2, "");
     if (!strcmp("frameRate", index))
     {
-        D3D9Application* self = thisApp(L);
+        D3D9Console* self = thisApp(L);
         lua_pushnumber(L, self->get_frame_rate());
         return 1;
     }
@@ -87,7 +87,7 @@ static int l_imageMode(lua_State *L)
 // 载入图片纹理，返回一个Image对象
 static int l_loadImage(lua_State *L)
 {
-    D3D9Application* self = thisApp(L);
+    D3D9Console* self = thisApp(L);
     assert(self != NULL);
     TCHAR* file = ansi_to_unicode(luaL_optstring(L, 1, ""));
     IDirect3DTexture9* tex;
@@ -106,7 +106,7 @@ static int l_image(lua_State *L)
     static D3DXVECTOR3 centre;    // 精灵中心点(0代表左上角)
     static D3DXVECTOR3 position;  // 精灵的位置(0代表左上角)
 
-    D3D9Application* self = thisApp(L);
+    D3D9Console* self = thisApp(L);
     int args = 1;
     ImageData* pImage = (ImageData*)lua_touserdata(L, args++);
 
@@ -147,7 +147,7 @@ static int l_text(lua_State *L)
         rc0.left = x;
         rc0.top = y;
         // 创建字体Sprite TODO 放入Game类中
-        D3D9Application* self = thisApp(L);
+        D3D9Console* self = thisApp(L);
         self->m_pSprite->SetTransform(self->m_matrixStack.top());
         self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
         self->m_font->DrawText(self->m_pSprite, text, -1, &rc0, DT_NOCLIP, d3d::Color::White);
@@ -177,7 +177,7 @@ static int l_rotate(lua_State *L)
 {
     int n = lua_gettop(L);
     int args = 1;
-    D3D9Application* self = thisApp(L);
+    D3D9Console* self = thisApp(L);
     if (n == 1) {
         // 角度在0到2pi之间
         double angle = luaL_optnumber(L, args++, 0.0);
@@ -195,7 +195,7 @@ static int l_scale(lua_State *L)
 {
     int n = lua_gettop(L);
     int args = 1;
-    D3D9Application* self = thisApp(L);
+    D3D9Console* self = thisApp(L);
     if (n == 1) {
         double s = luaL_optnumber(L, args++, 0.0);
         self->m_matrixStack.scale(s, s, s);
@@ -220,7 +220,7 @@ static int l_translate(lua_State *L)
 {
     int n = lua_gettop(L);
     int args = 1;
-    D3D9Application* self = thisApp(L);
+    D3D9Console* self = thisApp(L);
     /*    if (n == 1) {
     double x;
     x = luaL_optnumber(L, args++, 0.0);
@@ -254,7 +254,7 @@ static int l_background(lua_State *L)
 {
     int n = lua_gettop(L);
     int args = 1;
-    D3D9Application* self = thisApp(L);
+    D3D9Console* self = thisApp(L);
 
     // 如果参数只有一个，则存在两种算法
     // 一种是将一个整数按位分解为RGB三个分量
