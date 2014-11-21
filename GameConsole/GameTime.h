@@ -19,9 +19,9 @@ public:
 	float Elapsed();
 
 private:
-	__int64 m_countsPerSec;	// ÆµÂÊ
-	__int64 m_prevCounts;
-	float	m_secPerCount;
+	__int64 _countsPerSec;	// ÆµÂÊ
+	__int64 _prevCounts;
+	float	_secPerCount;
 };
 
 } // namespace neo
