@@ -107,4 +107,16 @@ public:
 	TypeName();                                    \
 	DISALLOW_COPY_AND_ASSIGN(TypeName)
 
+// 声明单例类型
+#define	SINGLETON(type)	\
+	static type& Instance()	\
+	{	\
+		static type instance;	\
+		return instance;	\
+	}	\
+private:	\
+	type(){};	\
+	type(type const&);	\
+	type& operator=(type const&)
+
 #endif	// __basic_types_h__
