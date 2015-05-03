@@ -8,6 +8,7 @@
 
 using namespace calyx;
 
+// 所有内置模块在此声明
 static luaL_Reg modules[] = {
 	//{ "calyx.event", luaopen_calyx_event },
 	{"calyx.core", luaopen_calyx_core},

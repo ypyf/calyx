@@ -157,7 +157,7 @@ int D3D9Console::Run()
     if (ret != 0)
     {
         TCHAR message[1024];
-        wsprintf(message, TEXT("%s\n"), ansi_to_unicode(lua_tostring(L,-1)));
+        wsprintf(message, TEXT("%s\n"), ansi_to_unicode(lua_tostring(L, -1)));
         MessageBox(NULL, message, TEXT("Calyx"), MB_OK|MB_ICONSTOP);
         return false;
     }
@@ -224,12 +224,12 @@ void D3D9Console::Draw()
     // 重置变换矩阵
     m_matrixStack.loadIdentity();
 
-    // 调用Lua绘图函数
+    // 调用脚本绘图函数
     lua_getglobal(L, "draw");
     lua_pcall(L, 0, 0, 0);
 
     // 绘制立方体
-    //m_pDevice->DrawPrimitiveUP(D3DPT_LINELIST, 12, cube_vertices, sizeof(D3DXVECTOR4));
+    m_pDevice->DrawPrimitiveUP(D3DPT_LINELIST, 12, cube_vertices, sizeof(D3DXVECTOR4));
 
     // 结束场景绘制
     m_pDevice->EndScene();

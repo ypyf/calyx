@@ -85,6 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DX9Device.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="modules.cpp" />
@@ -100,8 +101,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DX9Device.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="MyModels.h" />
+    <ClInclude Include="RenderDevice.h" />
     <ClInclude Include="SpriteAnimator.h" />
     <ClInclude Include="MatrixStack.h" />
     <ClInclude Include="modules.h" />

@@ -1,6 +1,8 @@
 #ifndef __d3d9_application_h__
 #define __d3d9_application_h__
 
+#pragma once
+
 #define _CRT_NON_CONFORMING_SWPRINTFS
 
 #include <windows.h>	// This has to be included before any D3d header file
@@ -64,6 +66,7 @@ protected:
     // 处理图形设备相关联的资源
 	virtual bool AcquireDeviceResources();
 	virtual void ReleaseDeviceResources();
+
 	// 处理设备丢失
 	virtual void TryResetDevice();
     virtual bool OnResetDevice();
