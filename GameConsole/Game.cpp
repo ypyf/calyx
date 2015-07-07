@@ -221,9 +221,6 @@ void D3D9Console::Draw()
     // 调用绘图方法
     m_pDevice->BeginScene();
 
-    // 重置变换矩阵
-    m_matrixStack.loadIdentity();
-
     // 调用脚本绘图函数
     lua_getglobal(L, "draw");
     lua_pcall(L, 0, 0, 0);
@@ -436,9 +433,9 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
 
     AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);
 
-    m_hAppWindow = CreateWindowEx(dwExStyle,			// Extended Style For The Window
-        window_class_name,						// Class Name
-        title_buf,										// Window Title
+    m_hAppWindow = CreateWindowEx(dwExStyle,		// Extended Style For The Window
+        window_class_name,							// Class Name
+        title_buf,									// Window Title
         dwStyle |									// Defined Window Style
         WS_CLIPSIBLINGS |							// Required Window Style
         WS_CLIPCHILDREN,							// Required Window Style
@@ -482,20 +479,21 @@ bool D3D9Console::InitDirect3D()
     // 2. Get video card information
     // Or we can just use D3DADAPTER_DEFAULT, which always works.
 
-    // 	UINT videoCardCount = m_pD3dObject->GetAdapterCount();
-    // 	D3DADAPTER_IDENTIFIER9* videoCards = (D3DADAPTER_IDENTIFIER9*)malloc(sizeof(*videoCards)*videoCardCount);
-    // 	for (UINT i = 0; i < videoCardCount; i++)
-    // 	{
-    // 		printf("GetAdapterIdentifier()\n");
-    // 		m_pD3dObject->GetAdapterIdentifier(i, 0, &videoCards[i]);
-    // 	}
-    // 
-    // 	// 打印视频卡信息
-    // 	printf("Adapter List:\n");
-    // 	for (UINT i = 0; i < videoCardCount; i++)
-    // 	{
-    // 		printf("%s\n", videoCards[i].DeviceName);
-    // 	}
+ 	UINT videoCardCount = m_pd3dObject->GetAdapterCount();
+ 	D3DADAPTER_IDENTIFIER9* videoCards = (D3DADAPTER_IDENTIFIER9*)malloc(sizeof(*videoCards)*videoCardCount);
+ 	for (UINT i = 0; i < videoCardCount; i++)
+ 	{
+ 		//printf("GetAdapterIdentifier()\n");
+ 		m_pd3dObject->GetAdapterIdentifier(i, 0, &videoCards[i]);
+ 	}
+ 
+ 	// 打印显卡信息
+ 	//printf("Adapter List:\n");
+ 	for (UINT i = 0; i < videoCardCount; i++)
+ 	{
+ 		//printf("%s\n", videoCards[i].DeviceName);
+		printf("%s\n", videoCards[i].Description);
+ 	}
 
     // 3. 检查设备类型
     D3DDEVTYPE devicetype = D3DDEVTYPE_HAL;
@@ -556,7 +554,7 @@ bool D3D9Console::InitDirect3D()
 
     // 5.1 获取当前的显示模式
     D3DDISPLAYMODE d3ddm;
-    if (FAILED(m_pd3dObject->GetAdapterDisplayMode( D3DADAPTER_DEFAULT, &d3ddm)))
+    if (FAILED(m_pd3dObject->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
         return false;
 
     ZeroMemory(&m_d3dPresent, sizeof(m_d3dPresent));
