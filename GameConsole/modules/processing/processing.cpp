@@ -10,6 +10,7 @@
 
 using namespace calyx;
 
+// ÓÃÓÚ±£´æprocessing×´Ì¬
 struct PState
 {
     int image_mode;

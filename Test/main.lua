@@ -69,7 +69,7 @@ function draw()
     ps.image(attack1[count1], 300, 500)
 
     ps.pushMatrix()
-    ps.scale(1)
+    ps.scale(2)
     ps.image(stand1[count3], 300, 200)
     ps.popMatrix()
 

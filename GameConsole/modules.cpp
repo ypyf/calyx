@@ -23,6 +23,8 @@ int init_modules(lua_State *L)
     // 添加模块loader到package.preload表中
     for (size_t i = 0; modules[i].name != NULL; i++)
         luax_preload_module(L, modules[i]);
+
     luax_require_module(L, "calyx.core");
+
 	return 1;
 }

@@ -259,19 +259,19 @@ void D3D9Console::ReleaseDeviceResources()
     SafeRelease(&m_pSprite);
 }
 
-bool D3D9Console::OnLostDevice()
-{
-    m_pSprite->OnLostDevice();
-    return true;
-}
-
-// 进行设备丢失后的恢复
-bool D3D9Console::OnResetDevice()
-{
-    m_pSprite->OnResetDevice();
-    ResetGraphicsState();
-    return true;
-}
+//bool D3D9Console::OnLostDevice()
+//{
+//    m_pSprite->OnLostDevice();
+//    return true;
+//}
+//
+//// 进行设备丢失后的恢复
+//bool D3D9Console::OnResetDevice()
+//{
+//    m_pSprite->OnResetDevice();
+//    ResetGraphicsState();
+//    return true;
+//}
 
 // 设置图形设备状态
 bool D3D9Console::ResetGraphicsState()
@@ -618,38 +618,37 @@ void D3D9Console::CalculateFPS(float dt)
 }
 
 // 设备丢失后重置设备
+// 此方法必须在确认设备丢失后才能调用
 void D3D9Console::TryResetDevice()
 {
     HRESULT hr;
-
-    if (m_bDeviceLost)
+    while (FAILED(hr = m_pDevice->TestCooperativeLevel()))
     {
-        while (FAILED(hr = m_pDevice->TestCooperativeLevel()))
+        // 设备可以重置
+        if (D3DERR_DEVICENOTRESET == hr)
         {
-            // 设备可以重置
-            if (D3DERR_DEVICENOTRESET == hr)
+            // 释放精灵
+            m_pSprite->OnLostDevice();
+
+            // 重置设备状态
+            if (SUCCEEDED(hr = m_pDevice->Reset(&m_d3dPresent)))
             {
-                // 释放精灵
-                this->OnLostDevice();
+				m_pSprite->OnResetDevice();
+				this->ResetGraphicsState();
+            }
+        } 
+        //else if (D3DERR_DRIVERINTERNALERROR == hr)
+        //{
+        //    // Destroy and recreate device
+        //    MessageBox(NULL, TEXT("Direct3D driver internal error."), NULL, NULL);
+        //    exit(1);
+        //}
 
-                //Reset the device
-                if (SUCCEEDED(hr = m_pDevice->Reset(&m_d3dPresent)))
-                {
-                    this->OnResetDevice();
-                }
-            } 
-            //else if (D3DERR_DRIVERINTERNALERROR == hr)
-            //{
-            //    // Destroy and recreate device
-            //    MessageBox(NULL, TEXT("Direct3D driver internal error."), NULL, NULL);
-            //    exit(1);
-            //}
-            // wait a moment and try again
-            Sleep(100);
-        }
-
-        m_bDeviceLost = false;
+        // wait a moment and try again
+        Sleep(100);
     }
+
+    m_bDeviceLost = false;
 }
 
 LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)

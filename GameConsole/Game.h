@@ -69,8 +69,8 @@ protected:
 
 	// 处理设备丢失
 	virtual void TryResetDevice();
-    virtual bool OnResetDevice();
-    virtual bool OnLostDevice();
+    //virtual bool OnResetDevice();
+    //virtual bool OnLostDevice();
 	bool m_bHandleDeviceLost;
 	bool m_bDeviceLost;
 	
@@ -100,7 +100,7 @@ private:
 	GameTime* m_pTimer;
     //D3DXMATRIX view;
     
-    // lua stuff
+    // lua script
     lua_State* L;
     //int m_refThis;  // 保存在Lua注册表中的this指针的引用
 

@@ -8,7 +8,7 @@ namespace calyx
 	const char* CALYX_VER = "0.0.1";
 
     // 释放userdata对象
-    static int userdata_gc_method(lua_State *L) 
+    static int userdata_gc(lua_State *L) 
     {
         UserData *ud = (UserData*)lua_touserdata(L, 1);
         ud->GC();
@@ -23,7 +23,7 @@ namespace calyx
         memcpy(ud, val, size);
         lua_newtable(L); /* create metatable. */
         lua_pushliteral(L, "__gc"); /* push key '__gc' */
-        lua_pushcfunction(L, userdata_gc_method); /* push gc method. */
+        lua_pushcfunction(L, userdata_gc); /* push gc method. */
         lua_rawset(L, -3);    /* metatable['__gc'] = userdata_gc_method */
         lua_setmetatable(L, -2); /* set the userdata's metatable. */
         return 1;
@@ -31,7 +31,7 @@ namespace calyx
 
     int luax_preload_module(lua_State *L, luaL_Reg module)
     {
-        // 添加模块载入程序到表package.preload
+        // 添加模块载入函数到表package.preload
         lua_getglobal(L, "package");
         lua_getfield(L, -1, "preload");
         lua_pushcfunction(L, module.func);
