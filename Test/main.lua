@@ -96,7 +96,7 @@ function draw()
     --text("文字效果", 330, 150)
     --popMatrix()
 
-    ps.text(string.format("第 %d 帧", count2), posX, mouseY)
+    --ps.text(string.format("第 %d 帧", count2), posX, mouseY)
 end
 
 function update(dt)
