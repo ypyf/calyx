@@ -153,8 +153,7 @@ int D3D9Console::InitLua()
 int D3D9Console::Run()
 {
     // 载入游戏脚本
-    int ret = luaL_dofile(L, "main.lua");
-    if (ret != 0)
+	if (luaL_dofile(L, "main.lua"))
     {
         TCHAR message[1024];
         wsprintf(message, TEXT("%s\n"), ansi_to_unicode(lua_tostring(L, -1)));
@@ -164,7 +163,7 @@ int D3D9Console::Run()
 
     // 调用入口函数
     lua_getglobal(L, "setup");
-    if (lua_pcall(L, 0, 0, 0) != 0)
+    if (lua_pcall(L, 0, 0, 0))
         return false;
 
     // 处理系统消息
@@ -601,7 +600,6 @@ void D3D9Console::CalculateFPS(float dt)
 {
     static int frameCnt;
     static float elapsedTime;
-    //static TCHAR buffer[256];
 
     frameCnt++;
     elapsedTime += dt;
@@ -609,7 +607,6 @@ void D3D9Console::CalculateFPS(float dt)
     if (elapsedTime >= 1.0f)
     {
         m_fps = (float)frameCnt / elapsedTime;
-        // Reset elapsed time and frame counter
         frameCnt = 0;
         elapsedTime = 0;
     }
