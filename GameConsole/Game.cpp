@@ -464,8 +464,8 @@ bool D3D9Console::setWindowSize(int cx, int cy)
 // See http://en.wikibooks.org/wiki/DirectX/9.0/Direct3D/Initialization
 bool D3D9Console::InitDirect3D()
 {
-    HRESULT hr;
-    BOOL windowed = TRUE;
+    //HRESULT hr;
+    bool windowed = true;
 
     // 1. Get interface to Direct3D
     m_pd3dObject = Direct3DCreate9(D3D_SDK_VERSION);
@@ -476,70 +476,34 @@ bool D3D9Console::InitDirect3D()
     }
 
     // 2. Get video card information
-    // Or we can just use D3DADAPTER_DEFAULT, which always works.
+	D3DADAPTER_IDENTIFIER9 videoCard;
+	m_pd3dObject->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &videoCard);
+	printf("%s\n", videoCard.Description);
 
- 	UINT videoCardCount = m_pd3dObject->GetAdapterCount();
- 	D3DADAPTER_IDENTIFIER9* videoCards = (D3DADAPTER_IDENTIFIER9*)malloc(sizeof(*videoCards)*videoCardCount);
- 	for (UINT i = 0; i < videoCardCount; i++)
- 	{
- 		//printf("GetAdapterIdentifier()\n");
- 		m_pd3dObject->GetAdapterIdentifier(i, 0, &videoCards[i]);
- 	}
- 
- 	// 打印显卡信息
- 	//printf("Adapter List:\n");
- 	for (UINT i = 0; i < videoCardCount; i++)
- 	{
- 		//printf("%s\n", videoCards[i].DeviceName);
-		printf("%s\n", videoCards[i].Description);
- 	}
-
-    // 3. 检查设备类型
-    D3DDEVTYPE devicetype = D3DDEVTYPE_HAL;
-    // 	struct DeviceTypeFormat
-    // 	{
-    // 		D3DDEVTYPE	type;
-    // 		D3DFORMAT	format;
-    // 	} dtfs[] = {
-    // 		{D3DDEVTYPE_HAL, D3DFMT_X8R8G8B8},
-    // 		{D3DDEVTYPE_HAL, D3DFMT_X1R5G5B5},
-    // 		{D3DDEVTYPE_HAL, D3DFMT_R5G6B5},
-    // 		{D3DDEVTYPE_REF, D3DFMT_X8R8G8B8},
-    // 		{D3DDEVTYPE_REF, D3DFMT_X1R5G5B5},
-    // 		{D3DDEVTYPE_REF, D3DFMT_R5G6B5}
-    // 	};
-    // 	D3DFORMAT format;
-    // 	D3DDEVTYPE devicetype;
-    // 	
-    // 	int i;
-    // 	for (i = 0; i < arraysize(dtfs); ++i)
-    // 	{
-    // 		// 对于全屏程序，DisplayFormat与BackBufferForamt必须相同
-    // 		hr = m_pd3dObject->CheckDeviceType(D3DADAPTER_DEFAULT, dtfs[i].type, dtfs[i].format, dtfs[i].format, windowed);
-    // 		if (hr == D3D_OK)
-    // 			break;
-    // 	}
-    //format = dtfs[i].format;
-
+    // 3. 检查设备类型 (略)
+    
     // 4. Check device capabilities
+	D3DDEVTYPE devicetype = D3DDEVTYPE_HAL;
     D3DCAPS9 caps;
-    hr = m_pd3dObject->GetDeviceCaps(D3DADAPTER_DEFAULT, devicetype, &caps);
-    if (FAILED(hr))
+	if (FAILED(m_pd3dObject->GetDeviceCaps(D3DADAPTER_DEFAULT, devicetype, &caps)))
     {
         MessageBox(NULL, TEXT("Failed to get Direct3D device caps"), NULL, NULL);
         return false;
     }
 
-    // 检查硬件变换和光照
-    DWORD vtx_proc;
-    if (caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) {
-        vtx_proc = D3DCREATE_HARDWARE_VERTEXPROCESSING;
-        if (caps.DevCaps & D3DDEVCAPS_PUREDEVICE) {
+    DWORD vp;	// 是否支持硬件顶点变换和光照
+    if (caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) 
+	{
+		vp = D3DCREATE_HARDWARE_VERTEXPROCESSING;
+        if (caps.DevCaps & D3DDEVCAPS_PUREDEVICE) 
+		{
             // 这个特性能提高速度，但不利于调试
-            vtx_proc |= D3DCREATE_PUREDEVICE;
+			vp |= D3DCREATE_PUREDEVICE;
         }
-    } else {
-        vtx_proc = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+    } 
+	else 
+	{
+		vp = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
     }
 
     // Check present interval
@@ -568,8 +532,7 @@ bool D3D9Console::InitDirect3D()
     m_d3dPresent.hDeviceWindow = m_hAppWindow;				// 窗口模式下，默认(NULL)为接下来创建设备时指定的focus window
 
     // Create the D3dDevice
-    hr = m_pd3dObject->CreateDevice(D3DADAPTER_DEFAULT, devicetype, m_hAppWindow, vtx_proc, &m_d3dPresent, &m_pDevice);
-    if (FAILED(hr))
+	if (FAILED(m_pd3dObject->CreateDevice(D3DADAPTER_DEFAULT, devicetype, m_hAppWindow, vp, &m_d3dPresent, &m_pDevice)))
     {
         MessageBox(NULL, TEXT("Failed to create Direct3D device"), NULL, NULL);
         return false;
@@ -581,9 +544,9 @@ bool D3D9Console::InitDirect3D()
         m_d3dVertexIndexFormat = D3DFMT_INDEX32;
 
 #if 0
-    // 设置视口(非必须)
-    D3DVIEWPORT9 vp = { 20, 20, 640, 480, 0, 1 };
-    m_pDevice->SetViewport(&vp);
+    // 设置视口
+    D3DVIEWPORT9 viewport = { 20, 20, 640, 480, 0, 1 };
+	m_pDevice->SetViewport(&viewport);
 #endif
 
     return true;
