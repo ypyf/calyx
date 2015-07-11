@@ -4,7 +4,6 @@
 #include "modules/array/array.h"
 #include "modules/event/event.h"
 #include "modules/processing/processing.h"
-#include "Game.h"
 
 using namespace calyx;
 

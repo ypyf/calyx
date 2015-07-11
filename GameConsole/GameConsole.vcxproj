@@ -87,7 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="D3D9Console.cpp" />
     <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="modules.cpp" />
     <ClCompile Include="modules\array\array.cpp" />
@@ -118,7 +118,7 @@
     <ClInclude Include="TexCube.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="basic_types.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="D3D9Console.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="resource.h" />

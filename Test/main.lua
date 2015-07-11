@@ -1,5 +1,11 @@
 local ps = require 'calyx.processing'
 local loadImage = ps.loadImage
+local popMatrix = ps.popMatrix
+local pushMatrix = ps.pushMatrix
+local translate = ps.translate
+local rotate = ps.rotate
+local scale = ps.scale
+local image = ps.image
 
 --require 'module1'
 
@@ -28,6 +34,7 @@ function setup()
     attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
        run1 = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
      stand1 = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
+     box = loadImage('res/box.png')
 end
 
 count1 = 1
@@ -78,6 +85,18 @@ function draw()
     ps.translate(100, 100)
     ps.popMatrix()
 
+    
+  
+    pushMatrix()
+	-- ½«Í¼Æ¬Æ½ÒÆ
+	--translate(500, 500)
+    --imageMode(0)
+	scale(0.3)
+	rotate(x)
+	image(box, 100, 100)
+	popMatrix()
+
+    
     ps.pushMatrix()
     fps = string.format("%0.2f", frameRate)
     ps.text('Ö¡ÂÊ: '..fps, 10, 100)
@@ -111,7 +130,7 @@ function mousepressed(x, y, button)
         mouseY = y
         --translate(x, y)
     end
-    print(button.." "..x.." "..y)
+    --print(button.." "..x.." "..y)
 end
 
 function mouserelease(x, y, button)
@@ -121,7 +140,6 @@ triggerPause = true
 
 function keypressed(key, isrepeat)
 	io.write(key)
-    --io.write(key)
     if key == " " then
         if triggerPause then
             calyx.event.post("pause")

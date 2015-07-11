@@ -63,13 +63,13 @@
     <ClCompile Include="modules\processing\processing.cpp">
       <Filter>模块\processing</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="modules.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyModels.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D9Console.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,9 +87,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TexCube.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SpriteBatch.h">
@@ -138,6 +135,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="RenderDevice.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D9Console.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

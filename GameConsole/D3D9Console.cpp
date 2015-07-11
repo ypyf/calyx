@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 //#include <WinInet.h>	// URL
-#include "Game.h"
+#include "D3D9Console.h"
 #include "Calyx.h"
 #include "modules.h"
 #include "MyModels.h"

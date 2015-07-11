@@ -1,5 +1,5 @@
-#ifndef __d3d9_application_h__
-#define __d3d9_application_h__
+#ifndef __d3d9_console_h__
+#define __d3d9_console_h__
 
 #pragma once
 
@@ -56,7 +56,7 @@ protected:
     int  m_height;  // ´°¿Ú¸ß¶È
 	//int			m_uiClientWidth;
 	//int			m_uiClientHeight;
-	TString   m_sAppTitle;
+	cstring   m_sAppTitle;
 
 	// Direct3D Attributes
 	IDirect3D9*				m_pd3dObject;
@@ -115,4 +115,4 @@ private:
 
 }	// namespace neo
 
-#endif // __d3d9_application_h__
+#endif // __d3d9_console_h__

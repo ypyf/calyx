@@ -38,7 +38,7 @@ private:
 
 	//Texture
 	IDirect3DTexture9*	m_pTexture;
-	TString m_sTexFile;
+	cstring m_sTexFile;
 	
 };
 

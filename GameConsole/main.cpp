@@ -1,7 +1,7 @@
 ﻿//////////////////////////////////////
 // Entry Point
 //////////////////////////////////////
-#include "Game.h"
+#include "D3D9Console.h"
 
 // 控件外观
 //#pragma comment(lib, "ComCtl32.lib")

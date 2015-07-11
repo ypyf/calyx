@@ -4,9 +4,9 @@
 #include <string>
 
 #ifndef UNICODE  
-typedef std::string TString; 
+typedef std::string cstring; 
 #else
-typedef std::wstring TString; 
+typedef std::wstring cstring; 
 #endif
 
 #if defined(WIN32)

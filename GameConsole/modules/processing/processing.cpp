@@ -2,11 +2,14 @@
 
 #include "processing.h"
 #include "../../d3dUtil.h"
-#include "../../Game.h"
+#include "../../D3D9Console.h"
 #include <assert.h>
 
-#define CALYX_IMAGE_MODE_CORNER 0
-#define CALYX_IMAGE_MODE_CENTER 1
+enum ImageMode
+{
+	CALYX_IMAGE_MODE_CORNER = 0,
+	CALYX_IMAGE_MODE_CENTER = 1
+};
 
 using namespace calyx;
 
@@ -35,21 +38,12 @@ static D3D9Console* thisApp(lua_State *L)
     return self;
 }
 
-static PState* get_pstate(lua_State *L)
-{
-    lua_getfield(L, LUA_ENVIRONINDEX, "ps");
-    PState* pps = (PState*)lua_touserdata(L, -1);
-    assert(pps != NULL);
-    return pps;
-}
-
 // 全局(模块)环境钩子
-// __index(table, key)
 static int module_env_index(lua_State *L)
 {
     luaL_checktype(L, 1, LUA_TTABLE);
     const char* index = luaL_optstring(L, 2, "");
-    if (!strcmp("frameRate", index))
+    if (!strcmp("frameRate", index))	// 当前帧率
     {
         D3D9Console* self = thisApp(L);
         lua_pushnumber(L, self->get_frame_rate());
@@ -67,14 +61,23 @@ static void init_module(lua_State *L)
     static PState ps;
     ps.image_mode = CALYX_IMAGE_MODE_CORNER;
     lua_pushlightuserdata(L, &ps);
-    lua_setfield(L, LUA_ENVIRONINDEX, "ps");
+    lua_setfield(L, LUA_ENVIRONINDEX, "state");
 
     // 创建模块环境元表
+	// __index(table, key)
     lua_newtable(L);
     lua_pushstring(L, "__index");
     lua_pushcfunction(L, module_env_index);
     lua_rawset(L, -3);
     lua_setmetatable(L, LUA_ENVIRONINDEX);
+}
+
+static PState* get_pstate(lua_State *L)
+{
+	lua_getfield(L, LUA_ENVIRONINDEX, "state");
+	PState* pps = (PState*)lua_touserdata(L, -1);
+	assert(pps != NULL);
+	return pps;
 }
 
 static int l_imageMode(lua_State *L)
