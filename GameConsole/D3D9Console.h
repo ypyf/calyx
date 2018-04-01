@@ -7,13 +7,13 @@
 
 #include <windows.h>	// This has to be included before any D3d header file
 #include <TCHAR.h>
-#include "d3dUtil.h"
-#include "MatrixStack.h"
+
 #include "GameTime.h"
 #include "stringUtils.h"
 #include "basic_types.h"
 #include "keyboard.h"
 #include "TexCube.h"
+#include "MatrixStack.h"
 
 struct lua_State;
 

@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <windows.h>
-
 namespace calyx {
 
 class GameTime

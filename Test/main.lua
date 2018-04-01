@@ -30,7 +30,7 @@ function setup()
     printf("hello world\n")
     x = 0.1
     --ps.background(108, 108, 208)
-	ps.background(30, 82, 150)
+	--ps.background(30, 82, 150)
     attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
        run1 = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
      stand1 = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
@@ -87,14 +87,14 @@ function draw()
 
     
   
-    pushMatrix()
+    --pushMatrix()
 	-- ½«Í¼Æ¬Æ½ÒÆ
 	--translate(500, 500)
     --imageMode(0)
-	scale(0.3)
-	rotate(x)
-	image(box, 100, 100)
-	popMatrix()
+	--scale(0.3)
+	--rotate(x)
+	--image(box, 100, 100)
+	--popMatrix()
 
     
     ps.pushMatrix()

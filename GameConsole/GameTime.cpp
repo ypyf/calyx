@@ -1,4 +1,5 @@
 #include "GameTime.h"
+#include <windows.h>
 
 using namespace calyx;
 
