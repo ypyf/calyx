@@ -4,14 +4,15 @@
 #include <string>
 
 #ifndef UNICODE  
-typedef std::string cstring; 
+typedef std::string cstring;
 #else
-typedef std::wstring cstring; 
+typedef std::wstring cstring;
 #endif
 
 #if defined(WIN32)
 #include <windows.h>
 wchar_t* ansi_to_unicode(const char* pcMbcs);
+wchar_t* utf8_to_unicode(const char* pcMbcs);
 #endif // WIN32
 
 #endif	// __string_utils_h__

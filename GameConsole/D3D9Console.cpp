@@ -31,12 +31,12 @@ D3D9Console::~D3D9Console()
 
 
 #if 0
-static int calyx_lua_size(lua_State *L)
+static int calyx_lua_size(lua_State* L)
 {
     int n = lua_gettop(L);
     D3D9Application* self = (D3D9Application*)lua_touserdata(L, lua_upvalueindex(1));
 
-    if (n == 2) 
+    if (n == 2)
     {
         int cx = (int)luaL_optnumber(L, 1, 0.0);
         int cy = (int)luaL_optnumber(L, 2, 0.0);
@@ -52,7 +52,7 @@ static int calyx_lua_size(lua_State *L)
 
 // 事件处理程序
 // TODO 事件队列
-static int calyx_lua_event_post(lua_State *L)
+static int calyx_lua_event_post(lua_State* L)
 {
     int n = lua_gettop(L);
     int args = 1;
@@ -62,9 +62,11 @@ static int calyx_lua_event_post(lua_State *L)
         assert(self != NULL);
         if ("pause" == event) {
             self->Pause(true);
-        } else if ("run" == event) {
+        }
+        else if ("run" == event) {
             self->Pause(false);
-        } else if ("quit" == event) {
+        }
+        else if ("quit" == event) {
             self->Quit();
         }
     }
@@ -123,7 +125,7 @@ int D3D9Console::InitLua()
     lua_getfield(L, -1, "event");
     lua_pushlightuserdata(L, this);
     lua_pushcclosure(L, calyx_lua_event_post, 1);
-    lua_setfield(L, -2, "post");    
+    lua_setfield(L, -2, "post");
 
     // 图形方面的函数-------------------
     // TODO 用数组和循环
@@ -153,11 +155,11 @@ int D3D9Console::InitLua()
 int D3D9Console::Run()
 {
     // 载入游戏脚本
-	if (luaL_dofile(L, "main.lua"))
+    if (luaL_dofile(L, "main.lua"))
     {
         TCHAR message[1024];
         wsprintf(message, TEXT("%s\n"), ansi_to_unicode(lua_tostring(L, -1)));
-        MessageBox(NULL, message, TEXT("Calyx"), MB_OK|MB_ICONSTOP);
+        MessageBox(NULL, message, TEXT("Calyx"), MB_OK | MB_ICONSTOP);
         return false;
     }
 
@@ -168,10 +170,10 @@ int D3D9Console::Run()
 
     // 处理系统消息
     m_pTimer->Start();
-    MSG msg = {0};
+    MSG msg = { 0 };
     while (msg.message != WM_QUIT)
     {
-        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) 
+        if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);	// 翻译虚拟键码为ASCII
             DispatchMessage(&msg);
@@ -239,7 +241,7 @@ void D3D9Console::Draw()
 
 bool D3D9Console::AcquireDeviceResources()
 {
-    m_pDevice->CreateVertexBuffer(24 * sizeof(d3d::VertexNormTex), 0, 
+    m_pDevice->CreateVertexBuffer(24 * sizeof(d3d::VertexNormTex), 0,
         d3d::VertexNormTex::FVF, D3DPOOL_MANAGED, &m_pVB, NULL);
 
     m_pDevice->CreateIndexBuffer(36 * sizeof(DWORD),
@@ -273,10 +275,10 @@ void D3D9Console::ReleaseDeviceResources()
 bool D3D9Console::ResetGraphicsState()
 {
     // 创建并设置视图矩阵
-    D3DXVECTOR3 eye (1.5f, 0.75f, -1); //近乎于iso
+    D3DXVECTOR3 eye(1.5f, 0.75f, -1); //近乎于iso
     //D3DXVECTOR3 eye (1.5f, 0, -1);
-    D3DXVECTOR3 target (0, 0, 0);
-    D3DXVECTOR3 up (0, 1, 0);
+    D3DXVECTOR3 target(0, 0, 0);
+    D3DXVECTOR3 up(0, 1, 0);
     D3DXMATRIXA16 view;
 
     D3DXMatrixLookAtLH(&view, &eye, &target, &up);
@@ -342,8 +344,8 @@ bool D3D9Console::InitGraphics()
         CLEARTYPE_QUALITY,
         DEFAULT_PITCH | FF_DONTCARE,
         TEXT("fixedsys"),
-        &m_font)))  {
-            return false;
+        &m_font))) {
+        return false;
     }
 
     return true;
@@ -398,18 +400,18 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
 
     WNDCLASSEX wcex;
     ZeroMemory(&wcex, sizeof wcex);
-    wcex.cbSize			= sizeof wcex;
-    wcex.cbClsExtra		= 0;									// No Extra Window Data
-    wcex.cbWndExtra		= 0;									// No Extra Window Data
-    wcex.style			= CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC;	// Redraw On Size, And Own DC For Window.
-    wcex.hInstance		= m_hInstance;							// Set The Instance
-    wcex.lpfnWndProc	= WndProc;								// WndProc Handles Messages
-    wcex.hIcon			= LoadIcon(NULL, IDI_APPLICATION);		// Load The Default Icon
-    wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
-    wcex.hbrBackground	= (HBRUSH)GetStockObject(WHITE_BRUSH);	// No Background Required For GL
-    wcex.lpszMenuName	= NULL;									// We Don't Want A Menu
-    wcex.lpszClassName	= window_class_name;					// Set The Class Name
-    wcex.hIconSm		= LoadIcon(NULL, IDI_APPLICATION);
+    wcex.cbSize = sizeof wcex;
+    wcex.cbClsExtra = 0;									// No Extra Window Data
+    wcex.cbWndExtra = 0;									// No Extra Window Data
+    wcex.style = CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC;	// Redraw On Size, And Own DC For Window.
+    wcex.hInstance = m_hInstance;							// Set The Instance
+    wcex.lpfnWndProc = WndProc;								// WndProc Handles Messages
+    wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);		// Load The Default Icon
+    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
+    wcex.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	// No Background Required For GL
+    wcex.lpszMenuName = NULL;									// We Don't Want A Menu
+    wcex.lpszClassName = window_class_name;					// Set The Class Name
+    wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
     if (!RegisterClassEx(&wcex))								// Attempt To Register The Window Class
     {
@@ -418,12 +420,12 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
     }
 
     // 缺省的窗口位置
-    static int _initX = 200;			
+    static int _initX = 200;
     static int _initY = 100;
     // Create Window
     DWORD		dwExStyle;				// Window Extended Style
     DWORD		dwStyle;				// Window Style
-    RECT WindowRect = {_initX, _initY, _initX + cx, _initY + cy};
+    RECT WindowRect = { _initX, _initY, _initX + cx, _initY + cy };
     dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
     dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
@@ -476,34 +478,38 @@ bool D3D9Console::InitDirect3D()
     }
 
     // 2. Get video card information
-	D3DADAPTER_IDENTIFIER9 videoCard;
-	m_pd3dObject->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &videoCard);
-	printf("%s\n", videoCard.Description);
+    D3DADAPTER_IDENTIFIER9 videoCard;
+    m_pd3dObject->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &videoCard);
 
-    // 3. 检查设备类型 (略)
+    // 保持显卡信息
+    lua_getglobal(L, "screen");
+    lua_pushstring(L, videoCard.Description);
+    lua_setfield(L, -2, "videoCard");
     
+    // 3. 检查设备类型 (略)
+
     // 4. Check device capabilities
-	D3DDEVTYPE devicetype = D3DDEVTYPE_HAL;
+    D3DDEVTYPE devicetype = D3DDEVTYPE_HAL;
     D3DCAPS9 caps;
-	if (FAILED(m_pd3dObject->GetDeviceCaps(D3DADAPTER_DEFAULT, devicetype, &caps)))
+    if (FAILED(m_pd3dObject->GetDeviceCaps(D3DADAPTER_DEFAULT, devicetype, &caps)))
     {
         MessageBox(NULL, TEXT("Failed to get Direct3D device caps"), NULL, NULL);
         return false;
     }
 
     DWORD vp;	// 是否支持硬件顶点变换和光照
-    if (caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) 
-	{
-		vp = D3DCREATE_HARDWARE_VERTEXPROCESSING;
-        if (caps.DevCaps & D3DDEVCAPS_PUREDEVICE) 
-		{
+    if (caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
+    {
+        vp = D3DCREATE_HARDWARE_VERTEXPROCESSING;
+        if (caps.DevCaps & D3DDEVCAPS_PUREDEVICE)
+        {
             // 这个特性能提高速度，但不利于调试
-			vp |= D3DCREATE_PUREDEVICE;
+            vp |= D3DCREATE_PUREDEVICE;
         }
-    } 
-	else 
-	{
-		vp = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+    }
+    else
+    {
+        vp = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
     }
 
     // Check present interval
@@ -532,7 +538,7 @@ bool D3D9Console::InitDirect3D()
     m_d3dPresent.hDeviceWindow = m_hAppWindow;				// 窗口模式下，默认(NULL)为接下来创建设备时指定的focus window
 
     // Create the D3dDevice
-	if (FAILED(m_pd3dObject->CreateDevice(D3DADAPTER_DEFAULT, devicetype, m_hAppWindow, vp, &m_d3dPresent, &m_pDevice)))
+    if (FAILED(m_pd3dObject->CreateDevice(D3DADAPTER_DEFAULT, devicetype, m_hAppWindow, vp, &m_d3dPresent, &m_pDevice)))
     {
         MessageBox(NULL, TEXT("Failed to create Direct3D device"), NULL, NULL);
         return false;
@@ -546,7 +552,7 @@ bool D3D9Console::InitDirect3D()
 #if 0
     // 设置视口
     D3DVIEWPORT9 viewport = { 20, 20, 640, 480, 0, 1 };
-	m_pDevice->SetViewport(&viewport);
+    m_pDevice->SetViewport(&viewport);
 #endif
 
     return true;
@@ -591,10 +597,10 @@ void D3D9Console::TryResetDevice()
             // 重置设备状态
             if (SUCCEEDED(hr = m_pDevice->Reset(&m_d3dPresent)))
             {
-				m_pSprite->OnResetDevice();
-				this->ResetGraphicsState();
+                m_pSprite->OnResetDevice();
+                this->ResetGraphicsState();
             }
-        } 
+        }
         //else if (D3DERR_DRIVERINTERNALERROR == hr)
         //{
         //    // Destroy and recreate device
@@ -618,42 +624,42 @@ LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
         PostQuitMessage(0);
         break;
     case WM_SIZE:
-        {
-            //m_width = LOWORD(lParam);
-            //m_height = HIWORD(lParam);
-            //this->ResetGraphicsState();
-        } break;
+    {
+        //m_width = LOWORD(lParam);
+        //m_height = HIWORD(lParam);
+        //this->ResetGraphicsState();
+    } break;
     case WM_LBUTTONDOWN:
-        {
-            POINT pos;
-            pos.x = LOWORD(lParam);
-            pos.y = HIWORD(lParam);
-            lua_getglobal(L, "mousepressed");
-            lua_pushinteger(L, pos.x);
-            lua_pushinteger(L, pos.y);
-            lua_pushstring(L, "left");
-            lua_pcall(L, 3, 0, 0);
-        } break;
+    {
+        POINT pos;
+        pos.x = LOWORD(lParam);
+        pos.y = HIWORD(lParam);
+        lua_getglobal(L, "mousepressed");
+        lua_pushinteger(L, pos.x);
+        lua_pushinteger(L, pos.y);
+        lua_pushstring(L, "left");
+        lua_pcall(L, 3, 0, 0);
+    } break;
     case WM_RBUTTONDOWN:
-        {
-            POINT pos;
-            pos.x = LOWORD(lParam);
-            pos.y = HIWORD(lParam);
-            lua_getglobal(L, "mousepressed");
-            lua_pushinteger(L, pos.x);
-            lua_pushinteger(L, pos.y);
-            lua_pushstring(L, "right");
-            lua_pcall(L, 3, 0, 0);
-        } break;
+    {
+        POINT pos;
+        pos.x = LOWORD(lParam);
+        pos.y = HIWORD(lParam);
+        lua_getglobal(L, "mousepressed");
+        lua_pushinteger(L, pos.x);
+        lua_pushinteger(L, pos.y);
+        lua_pushstring(L, "right");
+        lua_pcall(L, 3, 0, 0);
+    } break;
     case WM_CHAR:
-        {
-            // 是否重复击键
-            WORD isrepeat = HIWORD(lParam) & KF_REPEAT;
-            lua_getglobal(L, "keypressed");
-            lua_pushstring(L, ctos(wParam));
-            lua_pushboolean(L, isrepeat);
-            lua_pcall(L, 2, 0, 0);
-        } break;
+    {
+        // 是否重复击键
+        WORD isrepeat = HIWORD(lParam) & KF_REPEAT;
+        lua_getglobal(L, "keypressed");
+        lua_pushstring(L, ctos(wParam));
+        lua_pushboolean(L, isrepeat);
+        lua_pcall(L, 2, 0, 0);
+    } break;
     default:
         result = DefWindowProc(hWnd, msg, wParam, lParam);
     }

@@ -1,7 +1,6 @@
-﻿//////////////////////////////////////
-// Entry Point
-//////////////////////////////////////
-#include "D3D9Console.h"
+﻿#include "D3D9Console.h"
+
+#pragma comment(lib, "lua51.lib")
 
 // 控件外观
 //#pragma comment(lib, "ComCtl32.lib")

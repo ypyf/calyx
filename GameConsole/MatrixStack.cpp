@@ -51,5 +51,5 @@ void MatrixStack::scale(double x, double y, double z)
 
 void MatrixStack::translate(double x, double y, double z)
 {
-	m_stack->TranslateLocal((FLOAT)x, (FLOAT)y, (FLOAT)z);
+    m_stack->TranslateLocal((FLOAT)x, (FLOAT)y, (FLOAT)z);
 }

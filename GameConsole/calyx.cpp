@@ -5,20 +5,20 @@
 
 namespace calyx
 {
-	const char* CALYX_VER = "0.0.1";
+    const char* CALYX_VER = "0.0.1";
 
     // 释放userdata对象
-    static int userdata_gc(lua_State *L) 
+    static int userdata_gc(lua_State* L)
     {
-        UserData *ud = (UserData*)lua_touserdata(L, 1);
+        UserData* ud = (UserData*)lua_touserdata(L, 1);
         ud->GC();
         return 0;
     }
 
     // 创建userdata对象
-    int create_userdata(lua_State *L, void *val, size_t size)
+    int create_userdata(lua_State* L, void* val, size_t size)
     {
-        void *ud = lua_newuserdata(L, size);
+        void* ud = lua_newuserdata(L, size);
         // 初始化userdata对象
         memcpy(ud, val, size);
         lua_newtable(L); /* create metatable. */
@@ -29,7 +29,7 @@ namespace calyx
         return 1;
     }
 
-    int luax_preload_module(lua_State *L, luaL_Reg module)
+    int luax_preload_module(lua_State* L, luaL_Reg module)
     {
         // 添加模块载入函数到表package.preload
         lua_getglobal(L, "package");
@@ -41,7 +41,7 @@ namespace calyx
     }
 
     // require 'xxx'
-    int luax_require_module(lua_State *L, const char *module)
+    int luax_require_module(lua_State* L, const char* module)
     {
         lua_getglobal(L, "require");
         lua_pushstring(L, module);
@@ -49,7 +49,7 @@ namespace calyx
         return 1;
     }
 
-    static int l_printf(lua_State *L) 
+    static int l_printf(lua_State* L)
     {
         lua_pushvalue(L, lua_upvalueindex(2));  // retrieve string.format
         lua_insert(L, 1);
@@ -61,7 +61,7 @@ namespace calyx
     }
 
     // register lua function 'printf'
-    int luaopen_printf(lua_State *L)
+    int luaopen_printf(lua_State* L)
     {
         lua_getglobal(L, "io");
         lua_getglobal(L, "string");

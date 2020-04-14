@@ -5,22 +5,22 @@
 
 namespace calyx {
 
-class GameTime
-{
-public:
-	GameTime();
-	~GameTime();
+    class GameTime
+    {
+    public:
+        GameTime();
+        ~GameTime();
 
-	int Init();
-	void Start();
-	void Reset();
-	float Elapsed();
+        int Init();
+        void Start();
+        void Reset();
+        float Elapsed();
 
-private:
-	__int64 _countsPerSec;	// ÆµÂÊ
-	__int64 _prevCounts;
-	float	_secPerCount;
-};
+    private:
+        __int64 _countsPerSec;	// ÆµÂÊ
+        __int64 _prevCounts;
+        float	_secPerCount;
+    };
 
 } // namespace neo
 

@@ -7,8 +7,8 @@
 
 enum ImageMode
 {
-	CALYX_IMAGE_MODE_CORNER = 0,
-	CALYX_IMAGE_MODE_CENTER = 1
+    CALYX_IMAGE_MODE_CORNER = 0,
+    CALYX_IMAGE_MODE_CENTER = 1
 };
 
 using namespace calyx;
@@ -29,7 +29,7 @@ struct ImageData : UserData
     }
 };
 
-static D3D9Console* thisApp(lua_State *L)
+static D3D9Console* thisApp(lua_State* L)
 {
     lua_getfield(L, LUA_REGISTRYINDEX, "thisapp");
     D3D9Console* self = (D3D9Console*)lua_touserdata(L, -1);
@@ -39,7 +39,7 @@ static D3D9Console* thisApp(lua_State *L)
 }
 
 // 全局(模块)环境钩子
-static int module_env_index(lua_State *L)
+static int module_env_index(lua_State* L)
 {
     luaL_checktype(L, 1, LUA_TTABLE);
     const char* index = luaL_optstring(L, 2, "");
@@ -56,7 +56,7 @@ static int module_env_index(lua_State *L)
     }
 }
 
-static void init_module(lua_State *L)
+static void init_module(lua_State* L)
 {
     static PState ps;
     ps.image_mode = CALYX_IMAGE_MODE_CORNER;
@@ -64,7 +64,7 @@ static void init_module(lua_State *L)
     lua_setfield(L, LUA_ENVIRONINDEX, "state");
 
     // 创建模块环境元表
-	// __index(table, key)
+        // __index(table, key)
     lua_newtable(L);
     lua_pushstring(L, "__index");
     lua_pushcfunction(L, module_env_index);
@@ -72,24 +72,24 @@ static void init_module(lua_State *L)
     lua_setmetatable(L, LUA_ENVIRONINDEX);
 }
 
-static PState* get_pstate(lua_State *L)
+static PState* get_pstate(lua_State* L)
 {
-	lua_getfield(L, LUA_ENVIRONINDEX, "state");
-	PState* pps = (PState*)lua_touserdata(L, -1);
-	assert(pps != NULL);
-	return pps;
+    lua_getfield(L, LUA_ENVIRONINDEX, "state");
+    PState* pps = (PState*)lua_touserdata(L, -1);
+    assert(pps != NULL);
+    return pps;
 }
 
-static int l_imageMode(lua_State *L)
+static int l_imageMode(lua_State* L)
 {
-	int args = 1;
-	int mode = (int)luaL_optnumber(L, args++, 0);
-	get_pstate(L)->image_mode = mode;
-	return 0;
+    int args = 1;
+    int mode = (int)luaL_optnumber(L, args++, 0);
+    get_pstate(L)->image_mode = mode;
+    return 0;
 }
 
 // 载入图片纹理，返回一个Image对象
-static int l_loadImage(lua_State *L)
+static int l_loadImage(lua_State* L)
 {
     D3D9Console* self = thisApp(L);
     assert(self != NULL);
@@ -105,7 +105,7 @@ static int l_loadImage(lua_State *L)
 }
 
 // 绘制纹理
-static int l_image(lua_State *L)
+static int l_image(lua_State* L)
 {
     static D3DXVECTOR3 centre;    // 精灵中心点(0代表左上角)
     static D3DXVECTOR3 position;  // 精灵的位置(0代表左上角)
@@ -131,53 +131,55 @@ static int l_image(lua_State *L)
     //centre.x = position.x + centerX;
     //centre.y = position.y + cneterY;
     //}
-    self->m_pSprite->SetTransform(self->m_matrixStack.top());       
+    self->m_pSprite->SetTransform(self->m_matrixStack.top());
     self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-    self->m_pSprite->Draw(pImage->tex, NULL, &centre, &position, D3DCOLOR_RGBA(255,255,255,255));  
-    self->m_pSprite->End();  
+    self->m_pSprite->Draw(pImage->tex, NULL, &centre, &position, D3DCOLOR_RGBA(255, 255, 255, 255));
+    self->m_pSprite->End();
     return 0;
 }
 
 // 输出文字
-static int l_text(lua_State *L)
+static int l_text(lua_State* L)
 {
-    static RECT rc0 = {0, 0, 0, 0};
+    static RECT rc = { 0, 0, 0, 0 };
     int n = lua_gettop(L);
+    if (n < 3) return 0;
+
     int args = 1;
-    if (n >= 3) {
-        TCHAR *text = ansi_to_unicode(luaL_optstring(L, args++, ""));
-        int x = (int)luaL_optnumber(L, args++, 0);
-        int y = (int)luaL_optnumber(L, args++, 0);
-        rc0.left = x;
-        rc0.top = y;
-        // 创建字体Sprite TODO 放入Game类中
-        D3D9Console* self = thisApp(L);
-        self->m_pSprite->SetTransform(self->m_matrixStack.top());
-        self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
-        self->m_font->DrawText(self->m_pSprite, text, -1, &rc0, DT_NOCLIP, d3d::Color::White);
-        self->m_pSprite->End();
-        free(text);
-    }
+    const char* utf8Str = luaL_optstring(L, args++, "");
+    TCHAR* unicodeStr = utf8_to_unicode(utf8Str);
+    rc.left = (int)luaL_optnumber(L, args++, 0);
+    rc.top = (int)luaL_optnumber(L, args++, 0);
+
+    // 创建字体Sprite
+    // TODO 放入Game类中
+    D3D9Console* self = thisApp(L);
+    self->m_pSprite->SetTransform(self->m_matrixStack.top());
+    self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
+    self->m_font->DrawText(self->m_pSprite, unicodeStr, -1, &rc, DT_NOCLIP, d3d::Color::White);
+    self->m_pSprite->End();
+    free(unicodeStr);
+
     return 0;
 }
 
 // 矩阵栈操作 -------------------
 
 // TODO 检查push深度
-static int l_pushMatrix(lua_State *L)
+static int l_pushMatrix(lua_State* L)
 {
     thisApp(L)->m_matrixStack.push();
     return 0;
 }
 
-static int l_popMatrix(lua_State *L)
+static int l_popMatrix(lua_State* L)
 {
     thisApp(L)->m_matrixStack.pop();
     return 0;
 }
 
 // rotate(angle)
-static int l_rotate(lua_State *L)
+static int l_rotate(lua_State* L)
 {
     int n = lua_gettop(L);
     int args = 1;
@@ -195,7 +197,7 @@ static int l_rotate(lua_State *L)
     return 0;
 }
 
-static int l_scale(lua_State *L)
+static int l_scale(lua_State* L)
 {
     int n = lua_gettop(L);
     int args = 1;
@@ -203,24 +205,27 @@ static int l_scale(lua_State *L)
     if (n == 1) {
         double s = luaL_optnumber(L, args++, 0.0);
         self->m_matrixStack.scale(s, s, s);
-    } else if (n == 2) {
+    }
+    else if (n == 2) {
         double x, y;
         x = luaL_optnumber(L, args++, 0.0);
         y = luaL_optnumber(L, args++, 0.0);
         self->m_matrixStack.scale(x, y, 1.0);
-    } else if (n >= 3) {
+    }
+    else if (n >= 3) {
         double x, y, z;
         x = luaL_optnumber(L, args++, 0.0);
         y = luaL_optnumber(L, args++, 0.0);
         z = luaL_optnumber(L, args++, 0.0);
         self->m_matrixStack.scale(x, y, z);
-    } else {
+    }
+    else {
         self->m_matrixStack.scale(1.0, 1.0, 1.0);
     }
     return 0;
 }
 
-static int l_translate(lua_State *L)
+static int l_translate(lua_State* L)
 {
     int n = lua_gettop(L);
     int args = 1;
@@ -234,13 +239,15 @@ static int l_translate(lua_State *L)
         x = luaL_optnumber(L, args++, 0.0);
         y = luaL_optnumber(L, args++, 0.0);
         self->m_matrixStack.translate(x, y, 0.0);
-    } else if (n >= 3) {
+    }
+    else if (n >= 3) {
         double x, y, z;
         x = luaL_optnumber(L, args++, 0.0);
         y = luaL_optnumber(L, args++, 0.0);
         z = luaL_optnumber(L, args++, 0.0);
         self->m_matrixStack.translate(x, y, z);
-    } else {
+    }
+    else {
         self->m_matrixStack.translate(0.0, 0.0, 0.0);
     }
     return 0;
@@ -249,12 +256,12 @@ static int l_translate(lua_State *L)
 // 设置背景色
 // 有下列重载形式
 // bg(rgb)
-// ??bg(num, num)
+// bg(num, num)
 // bg(r, g, b)
 // bg(r, g, b, a)
 // bg(image), image:string
 // TODO 目前只考虑了RGB颜色模式
-static int l_background(lua_State *L)
+static int l_background(lua_State* L)
 {
     int n = lua_gettop(L);
     int args = 1;
@@ -270,13 +277,15 @@ static int l_background(lua_State *L)
         //int green = (rgb >> 8) & 0xFF;
         //int blue = rgb & 0xFF;
         self->m_bgcolor = D3DCOLOR_ARGB(255, v, v, v);
-    } else if (n == 3) {
+    }
+    else if (n == 3) {
         // RGB分量 0~255
         int v1 = (int)luaL_optnumber(L, args++, 0);
         int v2 = (int)luaL_optnumber(L, args++, 0);
         int v3 = (int)luaL_optnumber(L, args++, 0);
         self->m_bgcolor = D3DCOLOR_ARGB(255, v1, v2, v3);
-    } else if (n >= 4) {
+    }
+    else if (n >= 4) {
         // RGBA分量 0~255
         int v1 = (int)luaL_optnumber(L, args++, 0);
         int v2 = (int)luaL_optnumber(L, args++, 0);
@@ -304,9 +313,9 @@ static const struct luaL_reg exports[] =
     {NULL,          NULL}
 };
 
-extern "C" int luaopen_calyx_processing(lua_State *L)
+extern "C" int luaopen_calyx_processing(lua_State * L)
 {
     init_module(L);
-	luaL_openlib(L, "processing", exports, 0);
-	return 1;
+    luaL_openlib(L, "processing", exports, 0);
+    return 1;
 }

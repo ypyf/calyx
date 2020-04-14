@@ -30,22 +30,22 @@ function setup()
     printf("hello world\n")
     x = 0.1
     --ps.background(108, 108, 208)
-	--ps.background(30, 82, 150)
+    --ps.background(30, 82, 150)
     attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
-       run1 = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
-     stand1 = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
-     box = loadImage('res/box.png')
+    run1 = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
+    stand1 = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
+    box = loadImage('res/box.png')
 end
 
 count1 = 1
 count2 = 1
 count3 = 1
 speed = 0
-step = 9   -- ±¼ÅÜËÙ¶È
-posX = 0    -- ½ÇÉ«Î»ÖÃ
+step = 9   -- å¥”è·‘é€Ÿåº¦
+posX = 0    -- è§’è‰²ä½ç½®
 
 function draw()
-    -- ¿ØÖÆ¶¯»­ËÙ¶È
+    -- æ§åˆ¶åŠ¨ç”»é€Ÿåº¦
     if speed > 9 then
         count1 = count1 + 1
         count2 = count2 + 1
@@ -57,7 +57,7 @@ function draw()
         end
     end
 
-    -- ÖØÖÃ¶¯»­Ö¡Ö¸Õë
+    -- é‡ç½®åŠ¨ç”»å¸§æŒ‡é’ˆ
     if count1 > 5 then
         count1 = 1
     end
@@ -70,7 +70,7 @@ function draw()
         count3 = 1
     end
 
-    -- »æÖÆ¶¯»­
+    -- ç»˜åˆ¶åŠ¨ç”»
     ps.image(run1[count2], posX, 200)
 
     ps.image(attack1[count1], 300, 500)
@@ -85,10 +85,8 @@ function draw()
     ps.translate(100, 100)
     ps.popMatrix()
 
-    
-  
     --pushMatrix()
-	-- ½«Í¼Æ¬Æ½ÒÆ
+	-- å°†å›¾ç‰‡å¹³ç§»
 	--translate(500, 500)
     --imageMode(0)
 	--scale(0.3)
@@ -96,32 +94,33 @@ function draw()
 	--image(box, 100, 100)
 	--popMatrix()
 
-    
+
     ps.pushMatrix()
     fps = string.format("%0.2f", frameRate)
-    ps.text('Ö¡ÂÊ: '..fps, 10, 100)
+    ps.text('å¸§ç‡: '..fps, 10, 100)
     ps.popMatrix()
 
     --angle = string.format("%0.2f", x/math.pi*180)
-    --text('Ğı×ª½Ç¶È: '..angle, 10, 10)
-    ps.text("²Ù×÷ÏµÍ³: "..calyx.os, 10, 10)
-    ps.text('ÆÁÄ»¿í¶È: '..screen.width, 10, 30)
-    ps.text('ÆÁÄ»¸ß¶È: '..screen.height, 10, 50)
+    --text('æ—‹è½¬è§’åº¦: '..angle, 10, 10)
+    ps.text("æ“ä½œç³»ç»Ÿ: "..calyx.os, 10, 10)
+    ps.text("æ˜¾å¡ä¿¡æ¯: "..screen.videoCard, 10, 30)
+    ps.text('å±å¹•å®½åº¦: '..screen.width, 10, 50)
+    ps.text('å±å¹•é«˜åº¦: '..screen.height, 10, 70)
 
     --translate(100, 100)
 
     --pushMatrix()
     --rotate(0.3)
-    --text("ÎÄ×ÖĞ§¹û", 330, 150)
+    --text("æ–‡å­—æ•ˆæœ", 330, 150)
     --popMatrix()
 
-    --ps.text(string.format("µÚ %d Ö¡", count2), posX, mouseY)
+    --ps.text(string.format("ç¬¬ %d å¸§", count2), posX, mouseY)
 end
 
 function update(dt)
-    -- ¸üĞÂÖ¡ÂÊÏà¹ØµÄ±äÁ¿
+    -- æ›´æ–°å¸§ç‡ç›¸å…³çš„å˜é‡
     speed = speed + 1
-    x = (x + 0.02)%TWO_PI  
+    x = (x + 0.02)%TWO_PI
 end
 
 function mousepressed(x, y, button)
@@ -139,7 +138,7 @@ end
 triggerPause = true
 
 function keypressed(key, isrepeat)
-	io.write(key)
+    io.write(key)
     if key == " " then
         if triggerPause then
             calyx.event.post("pause")
@@ -150,12 +149,17 @@ function keypressed(key, isrepeat)
         end
     elseif key == 'c' then
         math.randomseed(os.time())
-        math.random(); math.random(); math.random()
         r = math.random(0, 255)
         g = math.random(0, 255)
         b = math.random(0, 255)
         print(string.format('set background color %.0f %.0f %.0f', r, g, b))
         ps.background(r, g, b)
+    elseif key == 'w' then
+        io.write("åŠ é€Ÿ")
+        step = step + 10
+    elseif key == 's' then
+        io.write("å‡é€Ÿ")
+        step = step - 10
     elseif key == 'q' then
         calyx.event.post("quit")
     end

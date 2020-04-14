@@ -46,16 +46,16 @@
 namespace calyx {
     namespace event {
 
-class EventQueue
-{
-public:
-    virtual void PostEvent(int event);
-    int PumpEvent();
-    void DispatchEvent(int event);
+        class EventQueue
+        {
+        public:
+            virtual void PostEvent(int event);
+            int PumpEvent();
+            void DispatchEvent(int event);
 
-private:
-    std::queue<int>	m_queue;	// 消息队列
-};
+        private:
+            std::queue<int>	m_queue;	// 消息队列
+        };
 
     }   // event
 }  // calyx

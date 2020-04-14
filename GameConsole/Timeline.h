@@ -3,9 +3,9 @@
 
 namespace calyx {
 
-class Timeline
-{
-};
+    class Timeline
+    {
+    };
 
 }	// namespace calyx
 

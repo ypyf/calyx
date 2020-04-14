@@ -11,8 +11,8 @@ namespace calyx {
         int anim_state;     // an animation state variable, up to you
         int attr;           // attributes pertaining
         // to the object (general)
-        float x,y;            // position bitmap will be displayed at
-        float xv,yv;          // velocity of object
+        float x, y;            // position bitmap will be displayed at
+        float xv, yv;          // velocity of object
         int width, height;  // the width and height of the bob
         int width_fill;     // internal, used to force 8*x wide surfaces
         int counter_1;      // general counters
@@ -27,12 +27,12 @@ namespace calyx {
         int anim_counter;   // used to time animation transitions
         int anim_index;     // animation element index
         int anim_count_max; // number of cycles before animation
-        int *animations[MAX_BOB_ANIMATIONS]; // animation sequences
+        int* animations[MAX_BOB_ANIMATIONS]; // animation sequences
 
         IDirect3DTexture9** images; // the bitmap images
         // DD surfaces
 
-    } BOB, *BOB_PTR;
+    } BOB, * BOB_PTR;
 
 }   // namespace calyx
 #endif // __animator_h__

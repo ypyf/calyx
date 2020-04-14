@@ -25,7 +25,7 @@ typedef unsigned short uint16;
 // ArraySizeHelper是一个返回类型为char[N]的函数,其形参类型为 T[N].
 // 函数没必要实现, 因为sizeof只需要类型.
 template<typename T, size_t N>
-char (&ArraySizeHelper(T (&array)[N]))[N];
+char(&ArraySizeHelper(T(&array)[N]))[N];
 
 // arraysize(arr)返回array数组的元素个数. 该表达式是编译时常量,
 // 可以用于定义新的数组. 如果传递一个指针会报编译时错误.
@@ -39,19 +39,19 @@ char (&ArraySizeHelper(T (&array)[N]))[N];
 inline const char* ctos(char c)
 {
     static const char* table[128] =
-    {"", "", "", "", "", "", "", "", 
-    "", "", "", "", "", "", "", "", 
-    "", "", "", "", "", "", "", "", 
-    "", "", "", "escape", "", "", "", "", 
+    { "", "", "", "", "", "", "", "",
+    "", "", "", "", "", "", "", "",
+    "", "", "", "", "", "", "", "",
+    "", "", "", "escape", "", "", "", "",
     " ", "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
     ":", ";", "<", "=", ">", "?", "@",
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", 
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
     "[", "\\", "]", "^", "_", "`",
-    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", 
-    "{", "|", "}", "~", ""};
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+    "{", "|", "}", "~", "" };
 
-	return (c >= 0 && c <= 127) ? table[c] : "";
+    return (c >= 0 && c <= 127) ? table[c] : "";
 }
 
 // 矩形
@@ -67,32 +67,32 @@ inline const char* ctos(char c)
 // 2D点
 typedef struct
 {
-	float x;
-	float y;
+    float x;
+    float y;
 } Point2D;
 
 // 复数
 struct Complex
 {
-	double re;
-	double im;
+    double re;
+    double im;
 
 public:
-	Complex operator * (const Complex &other) const
-	{
-		Complex c;
-		c.re = this->re * other.re - this->im * other.im;
-		c.im = this->im * other.re + this->re * other.im;
-		return c;
-	}
+    Complex operator * (const Complex& other) const
+    {
+        Complex c;
+        c.re = this->re * other.re - this->im * other.im;
+        c.im = this->im * other.re + this->re * other.im;
+        return c;
+    }
 
-	Complex operator + (const Complex &other) const
-	{
-		Complex c;
-		c.re = this->re + other.re;
-		c.im = this->im + other.im;
-		return c;
-	}
+    Complex operator + (const Complex& other) const
+    {
+        Complex c;
+        c.re = this->re + other.re;
+        c.im = this->im + other.im;
+        return c;
+    }
 };
 
 // 不可复制的类
