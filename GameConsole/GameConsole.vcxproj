@@ -89,13 +89,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="calyx.cpp" />
     <ClCompile Include="D3D9Console.cpp" />
+    <ClCompile Include="modules\modules.cpp" />
+    <ClCompile Include="mylua.cpp" />
     <ClCompile Include="MatrixStack.cpp" />
-    <ClCompile Include="modules.cpp" />
     <ClCompile Include="modules\array\array.cpp" />
-    <ClCompile Include="modules\core\core.cpp" />
     <ClCompile Include="modules\event\event.cpp" />
-    <ClCompile Include="Calyx.cpp" />
+    <ClCompile Include="modules\graphics\graphics.cpp" />
+    <ClCompile Include="modules\os\os.cpp" />
     <ClCompile Include="modules\processing\processing.cpp" />
     <ClCompile Include="MyModels.cpp" />
     <ClCompile Include="stringUtils.cpp" />
@@ -105,13 +107,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="modules\modules.h" />
+    <ClInclude Include="mylua.h" />
+    <ClInclude Include="modules\graphics\graphics.h" />
+    <ClInclude Include="modules\os\os.h" />
     <ClInclude Include="MyModels.h" />
     <ClInclude Include="RenderDevice.h" />
     <ClInclude Include="SpriteAnimator.h" />
     <ClInclude Include="MatrixStack.h" />
-    <ClInclude Include="modules.h" />
     <ClInclude Include="modules\array\array.h" />
-    <ClInclude Include="modules\core\core.h" />
     <ClInclude Include="modules\event\event.h" />
     <ClInclude Include="modules\processing\processing.h" />
     <ClInclude Include="calyx.h" />

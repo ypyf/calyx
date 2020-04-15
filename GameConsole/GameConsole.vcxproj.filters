@@ -16,9 +16,6 @@
     <Filter Include="模块">
       <UniqueIdentifier>{d3101c3d-b088-4c27-9761-3a98c15f79e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="模块\core">
-      <UniqueIdentifier>{9a1cf1b6-2e56-4ee0-ad31-fe6b2a003d5b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="模块\array">
       <UniqueIdentifier>{c8530ef1-772a-4541-a02a-3aad4a89c35a}</UniqueIdentifier>
     </Filter>
@@ -30,6 +27,12 @@
     </Filter>
     <Filter Include="模块\gui">
       <UniqueIdentifier>{a279a56f-ea05-4fde-9aaa-322397cade14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="模块\graphics">
+      <UniqueIdentifier>{24019ae2-eb39-4dec-963a-740ebe96fbde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="模块\os">
+      <UniqueIdentifier>{9a1cf1b6-2e56-4ee0-ad31-fe6b2a003d5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,17 +48,11 @@
     <ClCompile Include="stringUtils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="modules\core\core.cpp">
-      <Filter>模块\core</Filter>
-    </ClCompile>
     <ClCompile Include="modules\event\event.cpp">
       <Filter>模块\event</Filter>
     </ClCompile>
     <ClCompile Include="modules\array\array.cpp">
       <Filter>模块\array</Filter>
-    </ClCompile>
-    <ClCompile Include="Calyx.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MatrixStack.cpp">
       <Filter>源文件</Filter>
@@ -63,14 +60,26 @@
     <ClCompile Include="modules\processing\processing.cpp">
       <Filter>模块\processing</Filter>
     </ClCompile>
-    <ClCompile Include="modules.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MyModels.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="D3D9Console.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\graphics\graphics.cpp">
+      <Filter>模块\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="calyx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\os\os.cpp">
+      <Filter>模块\os</Filter>
+    </ClCompile>
+    <ClCompile Include="mylua.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\modules.cpp">
+      <Filter>模块</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +110,6 @@
     <ClInclude Include="stringUtils.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="modules\core\core.h">
-      <Filter>模块\core</Filter>
-    </ClInclude>
     <ClInclude Include="modules\event\event.h">
       <Filter>模块\event</Filter>
     </ClInclude>
@@ -118,9 +124,6 @@
     </ClInclude>
     <ClInclude Include="modules\processing\processing.h">
       <Filter>模块\processing</Filter>
-    </ClInclude>
-    <ClInclude Include="modules.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SpriteAnimator.h">
       <Filter>头文件</Filter>
@@ -139,6 +142,18 @@
     </ClInclude>
     <ClInclude Include="D3D9Console.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\graphics\graphics.h">
+      <Filter>模块\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\os\os.h">
+      <Filter>模块\os</Filter>
+    </ClInclude>
+    <ClInclude Include="mylua.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\modules.h">
+      <Filter>模块</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,8 @@
 #ifndef __calyx_event_module_h__
 #define __calyx_event_module_h__
 
+#include "../../calyx.h"
+
 #include <queue>
 
 //namespace love

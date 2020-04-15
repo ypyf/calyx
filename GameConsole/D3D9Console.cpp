@@ -2,9 +2,10 @@
 #include <assert.h>
 //#include <WinInet.h>	// URL
 #include "D3D9Console.h"
-#include "Calyx.h"
-#include "modules.h"
+#include "calyx.h"
+#include "mylua.h"
 #include "MyModels.h"
+#include "modules/modules.h"
 
 namespace
 {
@@ -117,7 +118,7 @@ int D3D9Console::InitLua()
     lua_setfield(L, LUA_REGISTRYINDEX, "thisapp");
 
     // 加入printf函数
-    luaopen_printf(L);
+    lua::register_printf(L);
 
     // 事件管理系统
     // event.post = c_event_post
@@ -478,14 +479,8 @@ bool D3D9Console::InitDirect3D()
     }
 
     // 2. Get video card information
-    D3DADAPTER_IDENTIFIER9 videoCard;
-    m_pd3dObject->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &videoCard);
+    m_pd3dObject->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &m_d3d9Adapter);
 
-    // 保持显卡信息
-    lua_getglobal(L, "screen");
-    lua_pushstring(L, videoCard.Description);
-    lua_setfield(L, -2, "videoCard");
-    
     // 3. 检查设备类型 (略)
 
     // 4. Check device capabilities
@@ -565,6 +560,15 @@ void D3D9Console::Shutdown()
     SafeDelete(&m_pTimer);
 }
 
+D3D9Console* D3D9Console::GetThis(lua_State* L)
+{
+    lua_getfield(L, LUA_REGISTRYINDEX, "thisapp");
+    D3D9Console* self = (D3D9Console*)lua_touserdata(L, -1);
+    // TODO throw exception
+    assert(self != NULL);
+    return self;
+}
+
 void D3D9Console::CalculateFPS(float dt)
 {
     static int frameCnt;
@@ -608,7 +612,7 @@ void D3D9Console::TryResetDevice()
         //    exit(1);
         //}
 
-        // wait a moment and try again
+        // wait a moment before try again
         Sleep(100);
     }
 
@@ -667,7 +671,17 @@ LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     return result;
 }
 
-double D3D9Console::get_frame_rate() const
+VideoCardInfo D3D9Console::GetVideoCardInfo() const
+{
+    VideoCardInfo info;
+    info.Description = m_d3d9Adapter.Description;
+    info.DeviceName = m_d3d9Adapter.DeviceName;
+    info.Driver = m_d3d9Adapter.Driver;
+
+    return info;
+}
+
+double D3D9Console::GetFrameRate() const
 {
     return m_fps;
 }

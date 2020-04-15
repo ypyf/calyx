@@ -1,14 +1,12 @@
-#include "core.h"
+#include "os.h"
+#include "../../mylua.h"
 
 #ifdef OS_WINDOWS
 #include <windows.h>
 #endif // OS_WINDOWS
 
-extern "C" int luaopen_calyx_core(lua_State * L)
+int luaopen_calyx_os(lua_State * L)
 {
-    lua_newtable(L);
-    lua_setglobal(L, "calyx");
-
     // Set version information.
     lua_getglobal(L, "calyx");
     lua_pushstring(L, calyx::CALYX_VER);

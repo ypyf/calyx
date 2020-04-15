@@ -19,6 +19,13 @@ struct lua_State;
 
 namespace calyx {
 
+    struct VideoCardInfo {
+        std::string Driver;
+        std::string DeviceName;
+        std::string Description;
+        std::string DriverVersion;
+    };
+
     class D3D9Console
     {
     public:
@@ -39,7 +46,13 @@ namespace calyx {
         virtual void Pause(bool status);
         virtual void Quit();
 
-        double get_frame_rate() const;
+        // 从lua虚拟机获取控制台实例
+        static D3D9Console* GetThis(lua_State* L);
+
+        // 读取显卡信息
+        VideoCardInfo GetVideoCardInfo() const;
+
+        double GetFrameRate() const;
 
         ID3DXFont* m_font;
         MatrixStack m_matrixStack;
@@ -75,7 +88,6 @@ namespace calyx {
         bool m_bDeviceLost;
 
         // Calculate FPS
-
         void CalculateFPS(float dt);
 
         // Shutdown the app
@@ -111,6 +123,9 @@ namespace calyx {
         D3DMATERIAL9	m_material;
         IDirect3DVertexBuffer9* m_pVB;	// 顶点缓存
         IDirect3DIndexBuffer9* m_pIB;	// 索引缓存
+
+        // 显卡信息
+        D3DADAPTER_IDENTIFIER9 m_d3d9Adapter;
     };
 
 }	// namespace neo

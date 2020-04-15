@@ -1,7 +1,7 @@
 #ifndef __calyx_modules_h__
 #define __calyx_modules_h__
 
-#include "Calyx.h"
+#include "../calyx.h"
 
 #ifdef __cplusplus
 extern "C"

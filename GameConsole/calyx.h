@@ -1,6 +1,8 @@
 #ifndef __calyx_h__
 #define __calyx_h__
 
+#include <lua.hpp>
+
 // Platform stuff.
 #if defined(WIN32) || defined(_WIN32)
 #	define OS_WINDOWS 1
@@ -21,24 +23,9 @@
 #	define CALYX_EXPORT
 #endif
 
-#include <lua.hpp>
-
-typedef int (*LuaGlueFunction)(lua_State*L);
-
 namespace calyx
 {
-    struct UserData
-    {
-        virtual void GC()=0;
-    };
-
-	extern const char* CALYX_VER;
-
-	int luax_preload_module(lua_State *L, luaL_Reg module);
-    int luax_require_module(lua_State *L, const char *module);
-    int luaopen_printf(lua_State *L);
-    int create_userdata(lua_State *L, void *val, size_t size);
-
+    extern const char* CALYX_VER;
 } // namespace calyx
 
 #endif // __calyx_h__

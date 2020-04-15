@@ -103,7 +103,7 @@ function draw()
     --angle = string.format("%0.2f", x/math.pi*180)
     --text('旋转角度: '..angle, 10, 10)
     ps.text("操作系统: "..calyx.os, 10, 10)
-    ps.text("显卡信息: "..screen.videoCard, 10, 30)
+    ps.text("显卡信息: "..calyx.graphics.getVideoCardInfo(), 10, 30)
     ps.text('屏幕宽度: '..screen.width, 10, 50)
     ps.text('屏幕高度: '..screen.height, 10, 70)
 
