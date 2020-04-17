@@ -81,6 +81,12 @@
     <ClCompile Include="modules\modules.cpp">
       <Filter>模块</Filter>
     </ClCompile>
+    <ClCompile Include="win32Utils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basic_types.h">
@@ -154,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="modules\modules.h">
       <Filter>模块</Filter>
+    </ClInclude>
+    <ClInclude Include="win32Utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

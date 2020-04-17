@@ -1,5 +1,9 @@
 #include "mylua.h"
-#include <memory.h>
+#include "stringUtils.h"
+#include "D3D9Console.h"
+#include "win32Utils.h"
+
+using namespace calyx;
 
 namespace {
 
@@ -25,6 +29,13 @@ namespace {
 }
 
 namespace lua {
+    // 显示错误信息
+    void show_error_message(lua_State* L) {
+        TCHAR message[1024];
+        wsprintf(message, TEXT("%s\n"), ansi_to_unicode(lua_tostring(L, -1)));
+        ::MessageBox(0, message, TEXT("Lua"), MB_OK | MB_ICONERROR);
+    }
+
     // 创建userdata对象
     int create_userdata(lua_State* L, void* val, size_t size)
     {

@@ -74,7 +74,6 @@ static int calyx_lua_event_post(lua_State* L)
     return 0;
 }
 
-
 int D3D9Console::InitLua()
 {
     L = luaL_newstate();
@@ -158,16 +157,16 @@ int D3D9Console::Run()
     // 载入游戏脚本
     if (luaL_dofile(L, "main.lua"))
     {
-        TCHAR message[1024];
-        wsprintf(message, TEXT("%s\n"), ansi_to_unicode(lua_tostring(L, -1)));
-        MessageBox(NULL, message, TEXT("Calyx"), MB_OK | MB_ICONSTOP);
+        lua::show_error_message(L);
         return false;
     }
 
     // 调用入口函数
     lua_getglobal(L, "setup");
-    if (lua_pcall(L, 0, 0, 0))
+    if (lua_pcall(L, 0, 0, 0)) {
+        lua::show_error_message(L);
         return false;
+    }
 
     // 处理系统消息
     m_pTimer->Start();
@@ -206,7 +205,6 @@ void D3D9Console::Update(float dt)
     lua_pushnumber(L, dt);
     lua_pcall(L, 1, 0, 0);
 }
-
 
 // 绘图函数
 void D3D9Console::Draw()
@@ -381,6 +379,12 @@ int D3D9Console::Init(HINSTANCE hInstance)
 
     if (!m_pTimer->Init())
         return false;
+
+    // 初始化系统配置
+#ifdef OS_WINDOWS
+    if (!InitWindows())
+        return false;
+#endif
 
     // 初始化Lua并启动脚本
     if (!InitLua())
@@ -567,6 +571,11 @@ D3D9Console* D3D9Console::GetThis(lua_State* L)
     // TODO throw exception
     assert(self != NULL);
     return self;
+}
+
+D3D9Console::operator HWND() const
+{
+    return m_hAppWindow;
 }
 
 void D3D9Console::CalculateFPS(float dt)

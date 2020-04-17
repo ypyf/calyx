@@ -14,6 +14,7 @@
 #include "keyboard.h"
 #include "TexCube.h"
 #include "MatrixStack.h"
+#include "Console.h"
 
 struct lua_State;
 
@@ -26,7 +27,7 @@ namespace calyx {
         std::string DriverVersion;
     };
 
-    class D3D9Console
+    class D3D9Console: public Console
     {
     public:
         D3D9Console();
@@ -59,6 +60,8 @@ namespace calyx {
         IDirect3DDevice9* m_pDevice;
         ID3DXSprite* m_pSprite;
         D3DCOLOR m_bgcolor; // ±³¾°É«
+
+        operator HWND() const;
 
     protected:
         // Attributes
