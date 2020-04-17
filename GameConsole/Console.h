@@ -2,9 +2,17 @@
 
 #include "calyx.h"
 
-class Console {
-public:
+namespace calyx {
+
+    class Console {
+    public:
 #ifdef OS_WINDOWS
-    bool InitWindows();
+        bool InitWindows();
 #endif
-};
+
+        int GetWindowWidth() const;
+        int GetHeight() const;
+    protected:
+        int m_windowWidth, m_windowHeight;
+    };
+} // namespace calyx

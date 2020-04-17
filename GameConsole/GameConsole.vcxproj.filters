@@ -28,11 +28,8 @@
     <Filter Include="模块\gui">
       <UniqueIdentifier>{a279a56f-ea05-4fde-9aaa-322397cade14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="模块\graphics">
-      <UniqueIdentifier>{24019ae2-eb39-4dec-963a-740ebe96fbde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="模块\os">
-      <UniqueIdentifier>{9a1cf1b6-2e56-4ee0-ad31-fe6b2a003d5b}</UniqueIdentifier>
+    <Filter Include="模块\core">
+      <UniqueIdentifier>{6216102d-6148-4e25-ad9e-58c5c084ab1b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,14 +63,8 @@
     <ClCompile Include="D3D9Console.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="modules\graphics\graphics.cpp">
-      <Filter>模块\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="calyx.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="modules\os\os.cpp">
-      <Filter>模块\os</Filter>
     </ClCompile>
     <ClCompile Include="mylua.cpp">
       <Filter>源文件</Filter>
@@ -86,6 +77,15 @@
     </ClCompile>
     <ClCompile Include="Console.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\core\core.cpp">
+      <Filter>模块\core</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\core\graphics.cpp">
+      <Filter>模块\core</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\core\os.cpp">
+      <Filter>模块\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,12 +149,6 @@
     <ClInclude Include="D3D9Console.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="modules\graphics\graphics.h">
-      <Filter>模块\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="modules\os\os.h">
-      <Filter>模块\os</Filter>
-    </ClInclude>
     <ClInclude Include="mylua.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -166,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="Console.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\core\core.h">
+      <Filter>模块\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

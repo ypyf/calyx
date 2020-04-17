@@ -27,7 +27,7 @@ namespace calyx {
         std::string DriverVersion;
     };
 
-    class D3D9Console: public Console
+    class D3D9Console : public Console
     {
     public:
         D3D9Console();
@@ -60,6 +60,7 @@ namespace calyx {
         IDirect3DDevice9* m_pDevice;
         ID3DXSprite* m_pSprite;
         D3DCOLOR m_bgcolor; // 背景色
+        ID3DXMesh* m_pTeapotMesh;  // 茶壶网格
 
         operator HWND() const;
 
@@ -68,10 +69,7 @@ namespace calyx {
         HWND		m_hAppWindow;
         HINSTANCE	m_hInstance;
         bool		m_bSuspended;	// 暂停更新画面
-        int  m_width;   // 窗口宽度
-        int  m_height;  // 窗口高度
-            //int			m_uiClientWidth;
-            //int			m_uiClientHeight;
+
         cstring   m_sAppTitle;
 
         // Direct3D Attributes
@@ -111,6 +109,7 @@ namespace calyx {
         bool setWindowSize(int cx, int cy);
 
     private:
+
         double m_fps;
         GameTime* m_pTimer;
         //D3DXMATRIX view;
@@ -119,14 +118,13 @@ namespace calyx {
         lua_State* L;
         //int m_refThis;  // 保存在Lua注册表中的this指针的引用
 
-        bool m_bWireFrame;
-        bool m_bLight;
+        bool m_bLight;     // 开启光照
         ID3DXMesh* m_pMesh;
 
+        // D3D 相关数据
         D3DMATERIAL9	m_material;
         IDirect3DVertexBuffer9* m_pVB;	// 顶点缓存
         IDirect3DIndexBuffer9* m_pIB;	// 索引缓存
-
         // 显卡信息
         D3DADAPTER_IDENTIFIER9 m_d3d9Adapter;
     };

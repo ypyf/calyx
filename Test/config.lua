@@ -5,8 +5,8 @@ Application {
     company    = "zchx",
     title      = "Calyx",
     console    = false,
-    width      = 1024,
-    height     = 768,
+    width      = 1600,
+    height     = 1000,
     icon       = nil,
     fullscreen = false,
 }

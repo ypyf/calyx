@@ -10,7 +10,7 @@ extern "C"
 {
 #endif
 
-    CALYX_EXPORT int luaopen_calyx_array(lua_State* L);
+    CALYX_EXPORT int luaopen_array(lua_State* L);
 
 #ifdef __cplusplus
 }

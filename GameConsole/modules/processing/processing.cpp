@@ -40,8 +40,7 @@ namespace {
         const char* index = luaL_optstring(L, 2, "");
         if (!strcmp("frameRate", index))	// 当前帧率
         {
-            D3D9Console* self = D3D9Console::GetThis(L);
-            lua_pushnumber(L, self->GetFrameRate());
+            lua_pushnumber(L, D3D9Console::GetThis(L)->GetFrameRate());
             return 1;
         }
         else
@@ -86,12 +85,11 @@ namespace {
     // 载入图片纹理，返回一个Image对象
     int l_loadImage(lua_State* L)
     {
-        D3D9Console* self = D3D9Console::GetThis(L);
         TCHAR* file = ansi_to_unicode(luaL_optstring(L, 1, ""));
         IDirect3DTexture9* tex;
         D3DXIMAGE_INFO image_info;
         D3DXGetImageInfoFromFile(file, &image_info);
-        create_texture_from_file(self->m_pDevice, file, &tex);
+        create_texture_from_file(D3D9Console::GetThis(L)->m_pDevice, file, &tex);
         ImageData image;
         image.tex = tex;
         image.info = image_info;
@@ -104,7 +102,7 @@ namespace {
         static D3DXVECTOR3 centre;    // 精灵中心点(0代表左上角)
         static D3DXVECTOR3 position;  // 精灵的位置(0代表左上角)
 
-        D3D9Console* self = D3D9Console::GetThis(L);
+        D3D9Console* console = D3D9Console::GetThis(L);
         int args = 1;
         ImageData* pImage = (ImageData*)lua_touserdata(L, args++);
 
@@ -125,10 +123,10 @@ namespace {
         //centre.x = position.x + centerX;
         //centre.y = position.y + cneterY;
         //}
-        self->m_pSprite->SetTransform(self->m_matrixStack.top());
-        self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
-        self->m_pSprite->Draw(pImage->tex, NULL, &centre, &position, D3DCOLOR_RGBA(255, 255, 255, 255));
-        self->m_pSprite->End();
+        console->m_pSprite->SetTransform(console->m_matrixStack.top());
+        console->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+        console->m_pSprite->Draw(pImage->tex, NULL, &centre, &position, D3DCOLOR_RGBA(255, 255, 255, 255));
+        console->m_pSprite->End();
         return 0;
     }
 
@@ -147,11 +145,11 @@ namespace {
 
         // 创建字体Sprite
         // TODO 放入Game类中
-        D3D9Console* self = D3D9Console::GetThis(L);
-        self->m_pSprite->SetTransform(self->m_matrixStack.top());
-        self->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
-        self->m_font->DrawText(self->m_pSprite, unicodeStr, -1, &rc, DT_NOCLIP, d3d::Color::White);
-        self->m_pSprite->End();
+        D3D9Console* console = D3D9Console::GetThis(L);
+        console->m_pSprite->SetTransform(console->m_matrixStack.top());
+        console->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
+        console->m_font->DrawText(console->m_pSprite, unicodeStr, -1, &rc, DT_NOCLIP, d3d::Color::White);
+        console->m_pSprite->End();
         free(unicodeStr);
 
         return 0;
@@ -177,7 +175,6 @@ namespace {
     {
         int n = lua_gettop(L);
         int args = 1;
-        D3D9Console* self = D3D9Console::GetThis(L);
         if (n == 1) {
             // 角度在0到2pi之间
             double angle = luaL_optnumber(L, args++, 0.0);
@@ -186,7 +183,7 @@ namespace {
             // 默认绕Z轴旋转
             //D3DXMatrixRotationAxis(&Rz, &v, (FLOAT)angle);
             D3DXMatrixRotationZ(&Rz, (FLOAT)angle);
-            self->m_matrixStack.multMatrix(&Rz);
+            D3D9Console::GetThis(L)->m_matrixStack.multMatrix(&Rz);
         }
         return 0;
     }
@@ -195,26 +192,26 @@ namespace {
     {
         int n = lua_gettop(L);
         int args = 1;
-        D3D9Console* self = D3D9Console::GetThis(L);
+        D3D9Console* console = D3D9Console::GetThis(L);
         if (n == 1) {
             double s = luaL_optnumber(L, args++, 0.0);
-            self->m_matrixStack.scale(s, s, s);
+            console->m_matrixStack.scale(s, s, s);
         }
         else if (n == 2) {
             double x, y;
             x = luaL_optnumber(L, args++, 0.0);
             y = luaL_optnumber(L, args++, 0.0);
-            self->m_matrixStack.scale(x, y, 1.0);
+            console->m_matrixStack.scale(x, y, 1.0);
         }
         else if (n >= 3) {
             double x, y, z;
             x = luaL_optnumber(L, args++, 0.0);
             y = luaL_optnumber(L, args++, 0.0);
             z = luaL_optnumber(L, args++, 0.0);
-            self->m_matrixStack.scale(x, y, z);
+            console->m_matrixStack.scale(x, y, z);
         }
         else {
-            self->m_matrixStack.scale(1.0, 1.0, 1.0);
+            console->m_matrixStack.scale(1.0, 1.0, 1.0);
         }
         return 0;
     }
@@ -223,7 +220,7 @@ namespace {
     {
         int n = lua_gettop(L);
         int args = 1;
-        D3D9Console* self = D3D9Console::GetThis(L);
+        D3D9Console* console = D3D9Console::GetThis(L);
         /*    if (n == 1) {
         double x;
         x = luaL_optnumber(L, args++, 0.0);
@@ -232,17 +229,17 @@ namespace {
             double x, y;
             x = luaL_optnumber(L, args++, 0.0);
             y = luaL_optnumber(L, args++, 0.0);
-            self->m_matrixStack.translate(x, y, 0.0);
+            console->m_matrixStack.translate(x, y, 0.0);
         }
         else if (n >= 3) {
             double x, y, z;
             x = luaL_optnumber(L, args++, 0.0);
             y = luaL_optnumber(L, args++, 0.0);
             z = luaL_optnumber(L, args++, 0.0);
-            self->m_matrixStack.translate(x, y, z);
+            console->m_matrixStack.translate(x, y, z);
         }
         else {
-            self->m_matrixStack.translate(0.0, 0.0, 0.0);
+            console->m_matrixStack.translate(0.0, 0.0, 0.0);
         }
         return 0;
     }
@@ -259,7 +256,7 @@ namespace {
     {
         int n = lua_gettop(L);
         int args = 1;
-        D3D9Console* self = D3D9Console::GetThis(L);
+        D3D9Console* console = D3D9Console::GetThis(L);
 
         // 如果参数只有一个，则存在两种算法
         // 一种是将一个整数按位分解为RGB三个分量
@@ -270,14 +267,14 @@ namespace {
             //int red = (rgb >> 16) & 0xFF;
             //int green = (rgb >> 8) & 0xFF;
             //int blue = rgb & 0xFF;
-            self->m_bgcolor = D3DCOLOR_ARGB(255, v, v, v);
+            console->m_bgcolor = D3DCOLOR_ARGB(255, v, v, v);
         }
         else if (n == 3) {
             // RGB分量 0~255
             int v1 = (int)luaL_optnumber(L, args++, 0);
             int v2 = (int)luaL_optnumber(L, args++, 0);
             int v3 = (int)luaL_optnumber(L, args++, 0);
-            self->m_bgcolor = D3DCOLOR_ARGB(255, v1, v2, v3);
+            console->m_bgcolor = D3DCOLOR_ARGB(255, v1, v2, v3);
         }
         else if (n >= 4) {
             // RGBA分量 0~255
@@ -285,14 +282,13 @@ namespace {
             int v2 = (int)luaL_optnumber(L, args++, 0);
             int v3 = (int)luaL_optnumber(L, args++, 0);
             int alpha = (int)luaL_optnumber(L, args++, 0);
-            self->m_bgcolor = D3DCOLOR_ARGB(alpha, v1, v2, v3);
+            console->m_bgcolor = D3DCOLOR_ARGB(alpha, v1, v2, v3);
         }
 
         return 0;
     }
 
-
-    const struct luaL_reg exports[] =
+    const struct luaL_Reg exports[] =
     {
         {"scale",       l_scale},
         {"rotate",      l_rotate},
@@ -309,7 +305,7 @@ namespace {
 
 }
 
-int luaopen_calyx_processing(lua_State* L)
+int luaopen_processing(lua_State* L)
 {
     init_module(L);
     luaL_openlib(L, "processing", exports, 0);

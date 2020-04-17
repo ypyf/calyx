@@ -167,13 +167,14 @@
     <ClCompile Include="calyx.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="D3D9Console.cpp" />
+    <ClCompile Include="modules\core\core.cpp" />
+    <ClCompile Include="modules\core\graphics.cpp" />
+    <ClCompile Include="modules\core\os.cpp" />
     <ClCompile Include="modules\modules.cpp" />
     <ClCompile Include="mylua.cpp" />
     <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="modules\array\array.cpp" />
     <ClCompile Include="modules\event\event.cpp" />
-    <ClCompile Include="modules\graphics\graphics.cpp" />
-    <ClCompile Include="modules\os\os.cpp" />
     <ClCompile Include="modules\processing\processing.cpp" />
     <ClCompile Include="MyModels.cpp" />
     <ClCompile Include="stringUtils.cpp" />
@@ -185,10 +186,9 @@
   <ItemGroup>
     <ClInclude Include="Console.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="modules\core\core.h" />
     <ClInclude Include="modules\modules.h" />
     <ClInclude Include="mylua.h" />
-    <ClInclude Include="modules\graphics\graphics.h" />
-    <ClInclude Include="modules\os\os.h" />
     <ClInclude Include="MyModels.h" />
     <ClInclude Include="RenderDevice.h" />
     <ClInclude Include="SpriteAnimator.h" />

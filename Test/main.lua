@@ -1,4 +1,4 @@
-local ps = require 'calyx.processing'
+local ps = require 'processing'
 local loadImage = ps.loadImage
 local popMatrix = ps.popMatrix
 local pushMatrix = ps.pushMatrix
@@ -6,8 +6,6 @@ local translate = ps.translate
 local rotate = ps.rotate
 local scale = ps.scale
 local image = ps.image
-
---require 'module1'
 
 TWO_PI = math.pi*2
 mouseX = 10
@@ -45,6 +43,12 @@ step = 9   -- 奔跑速度
 posX = 0    -- 角色位置
 
 function draw()
+    ps.pushMatrix()
+    ps.scale(0.5)
+    ps.image(box, 1500, 200)
+    calyx.graphics.teapot()
+    ps.popMatrix()
+
     -- 控制动画速度
     if speed > 9 then
         count1 = count1 + 1
@@ -54,6 +58,9 @@ function draw()
         posX = posX + step
         if posX > calyx.conf.app.width then
             posX = -100
+        end
+        if posX < -100 then
+            posX = calyx.conf.app.width
         end
     end
 
@@ -75,13 +82,12 @@ function draw()
 
     ps.image(attack1[count1], 300, 500)
 
-    ps.pushMatrix()
-    ps.scale(2)
-    ps.image(stand1[count3], 300, 200)
-    ps.popMatrix()
+    -- ps.pushMatrix()
+    -- ps.scale(2)
+    -- ps.image(stand1[count3], 300, 200)
+    -- ps.popMatrix()
 
     ps.pushMatrix()
-
     ps.translate(100, 100)
     ps.popMatrix()
 
@@ -97,15 +103,15 @@ function draw()
 
     ps.pushMatrix()
     fps = string.format("%0.2f", frameRate)
-    ps.text('帧率: '..fps, 10, 100)
+    ps.text('帧率: '..fps, 10, 170)
     ps.popMatrix()
 
     --angle = string.format("%0.2f", x/math.pi*180)
     --text('旋转角度: '..angle, 10, 10)
     ps.text("操作系统: "..calyx.os, 10, 10)
-    ps.text("显卡信息: "..calyx.graphics.getVideoCardInfo(), 10, 30)
-    ps.text('屏幕宽度: '..screen.width, 10, 50)
-    ps.text('屏幕高度: '..screen.height, 10, 70)
+    ps.text("显卡信息: "..calyx.graphics.getVideoCardInfo(), 10, 50)
+    ps.text('屏幕宽度: '..screen.width, 10, 90)
+    ps.text('屏幕高度: '..screen.height, 10, 130)
 
     --translate(100, 100)
 
@@ -147,6 +153,8 @@ function keypressed(key, isrepeat)
             calyx.event.post("run")
             triggerPause = true
         end
+    elseif key == 'v' then
+        calyx.graphics.setWireframe(not calyx.graphics.isWireframe())
     elseif key == 'c' then
         math.randomseed(os.time())
         r = math.random(0, 255)

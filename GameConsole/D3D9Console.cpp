@@ -6,10 +6,17 @@
 #include "mylua.h"
 #include "MyModels.h"
 #include "modules/modules.h"
+#include <DirectXMath.h>
 
 namespace
 {
     calyx::D3D9Console* g_pApp;
+
+    const TCHAR window_class_name[] = TEXT("D3D9Game Window CLass");
+
+    // 缺省的窗口位置
+    const int window_init_x = 200;
+    const int window_init_y = 100;
 
     // non-member window procedure
     LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -168,6 +175,38 @@ int D3D9Console::Run()
         return false;
     }
 
+    // 创建模型网格
+    D3DXCreateTeapot(m_pDevice, &m_pTeapotMesh, 0);
+
+    // 计算投影矩阵
+    D3DXMATRIX proj;
+    FLOAT aspect = (FLOAT)m_windowWidth / m_windowHeight;
+    D3DXMatrixPerspectiveFovLH(&proj, D3DX_PI / 4, aspect, 1.f, 1000.0f);
+
+    // 设置投影矩阵
+    m_pDevice->SetTransform(D3DTS_PROJECTION, &proj);
+
+    using namespace DirectX;
+    // 计算视图（摄像机）矩阵
+    XMFLOAT4X4 cameraViewMat;
+    XMFLOAT4 cameraPosition;
+    XMFLOAT4 cameraTarget;
+    XMFLOAT4 cameraUp;
+
+    cameraPosition = XMFLOAT4(0.0f, 2.0f, -15.0f, 0.0f);
+    cameraTarget = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
+    cameraUp = XMFLOAT4(0.0f, 1.0f, 0.0f, 0.0f);
+
+    XMVECTOR cPos = XMLoadFloat4(&cameraPosition);
+    XMVECTOR cTarg = XMLoadFloat4(&cameraTarget);
+    XMVECTOR cUp = XMLoadFloat4(&cameraUp);
+    XMMATRIX tmpMat = XMMatrixLookAtLH(cPos, cTarg, cUp);
+    XMStoreFloat4x4(&cameraViewMat, tmpMat);
+
+    // 设置视图矩阵
+    m_pDevice->SetTransform(D3DTS_VIEW, (D3DXMATRIX*)&cameraViewMat);
+
+
     // 处理系统消息
     m_pTimer->Start();
     MSG msg = { 0 };
@@ -191,7 +230,10 @@ int D3D9Console::Run()
             {
                 Update(deltaTime);
             }
+
+            // 调用绘图函数
             Draw();
+
             CalculateFPS(deltaTime);
         }
     }
@@ -218,6 +260,9 @@ void D3D9Console::Draw()
     // 清屏
     m_pDevice->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, m_bgcolor, 1.0f, 0);
 
+    // 关闭光照
+    m_pDevice->SetRenderState(D3DRS_LIGHTING, m_bLight);
+
     // 调用绘图方法
     m_pDevice->BeginScene();
 
@@ -225,8 +270,8 @@ void D3D9Console::Draw()
     lua_getglobal(L, "draw");
     lua_pcall(L, 0, 0, 0);
 
-    // 绘制立方体
-    m_pDevice->DrawPrimitiveUP(D3DPT_LINELIST, 12, cube_vertices, sizeof(D3DXVECTOR4));
+    //// 绘制立方体
+    //m_pDevice->DrawPrimitiveUP(D3DPT_LINELIST, 12, cube_vertices, sizeof(D3DXVECTOR4));
 
     // 结束场景绘制
     m_pDevice->EndScene();
@@ -254,6 +299,7 @@ void D3D9Console::ReleaseDeviceResources()
     SafeRelease(&m_pVB);
     SafeRelease(&m_pIB);
     SafeRelease(&m_pSprite);
+    SafeRelease(&m_pTeapotMesh);
 }
 
 //bool D3D9Console::OnLostDevice()
@@ -337,10 +383,11 @@ bool D3D9Console::InitGraphics()
     D3DXCreateSprite(m_pDevice, &m_pSprite);
 
     // 创建缺省字体
-    if (FAILED(D3DXCreateFont(m_pDevice, 20, 0, 0, 1, 0,
+    const int DEFAULT_FONT_HEIGH = 40;
+    if (FAILED(D3DXCreateFont(m_pDevice, DEFAULT_FONT_HEIGH, 0, 0, 1, 0,
         DEFAULT_CHARSET,
-        OUT_OUTLINE_PRECIS,
-        CLEARTYPE_QUALITY,
+        OUT_TT_ONLY_PRECIS, // 确保总是使用 TrueType 字体
+        CLEARTYPE_QUALITY,  // 该参数对TrueType字体没有影响
         DEFAULT_PITCH | FF_DONTCARE,
         TEXT("fixedsys"),
         &m_font))) {
@@ -362,8 +409,7 @@ void D3D9Console::Quit()
 
 int D3D9Console::Init(HINSTANCE hInstance)
 {
-    m_bWireFrame = false;
-    m_bLight = true;
+    m_bLight = false;
     m_bgcolor = d3d::Color::Cornflower; // 缺省背景色
     m_hInstance = hInstance;
     m_hAppWindow = NULL;
@@ -401,8 +447,6 @@ int D3D9Console::Init(HINSTANCE hInstance)
 
 bool D3D9Console::CreateApplicationWindow(int cx, int cy)
 {
-    static const TCHAR window_class_name[] = TEXT("D3D9Game Window CLass");
-
     WNDCLASSEX wcex;
     ZeroMemory(&wcex, sizeof wcex);
     wcex.cbSize = sizeof wcex;
@@ -424,28 +468,26 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
         return false;
     }
 
-    // 缺省的窗口位置
-    static int _initX = 200;
-    static int _initY = 100;
     // Create Window
     DWORD		dwExStyle;				// Window Extended Style
     DWORD		dwStyle;				// Window Style
-    RECT WindowRect = { _initX, _initY, _initX + cx, _initY + cy };
+    RECT WindowRect = { window_init_x, window_init_y, window_init_x + cx, window_init_y + cy };
     dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
     dwStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
-    TCHAR title_buf[256];
-    wsprintf(title_buf, TEXT("%s %dx%d"), m_sAppTitle.c_str(), cx, cy);
+    TCHAR title[256];
+    wsprintf(title, TEXT("%s %dx%d"), m_sAppTitle.c_str(), cx, cy);
 
+    // 校正窗口大小
     AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);
 
     m_hAppWindow = CreateWindowEx(dwExStyle,		// Extended Style For The Window
         window_class_name,							// Class Name
-        title_buf,									// Window Title
+        title,									// Window Title
         dwStyle |									// Defined Window Style
         WS_CLIPSIBLINGS |							// Required Window Style
         WS_CLIPCHILDREN,							// Required Window Style
-        _initX, _initY,								// Window Position
+        window_init_x, window_init_y,								// Window Position
         WindowRect.right - WindowRect.left,			// Calculate Window Width
         WindowRect.bottom - WindowRect.top,			// Calculate Window Height
         NULL,										// No Parent Window
@@ -458,6 +500,9 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
         return false;
     }
 
+    m_windowWidth = cx;
+    m_windowHeight = cy;
+
     return true;
 }
 
@@ -465,6 +510,8 @@ bool D3D9Console::setWindowSize(int cx, int cy)
 {
     // 只改变窗口大小
     SetWindowPos(m_hAppWindow, 0, 0, 0, cx, cy, SWP_NOMOVE | SWP_NOZORDER);
+    m_windowWidth = cx;
+    m_windowHeight = cy;
     return true;
 }
 

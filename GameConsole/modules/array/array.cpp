@@ -65,7 +65,7 @@ namespace {
     };
 }
 
-int luaopen_calyx_array(lua_State * L)
+int luaopen_array(lua_State * L)
 {
     luaL_openlib(L, "array", arraylib, 0);
     return 1;

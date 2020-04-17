@@ -8,7 +8,7 @@ extern "C"
 {
 #endif
 
-    CALYX_EXPORT int luaopen_calyx_processing(lua_State* L);
+    CALYX_EXPORT int luaopen_processing(lua_State* L);
 
 #ifdef __cplusplus
 }

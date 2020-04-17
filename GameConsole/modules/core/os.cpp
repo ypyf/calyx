@@ -1,16 +1,17 @@
-#include "os.h"
-#include "../../mylua.h"
+#include "core.h"
 
 #ifdef OS_WINDOWS
 #include <windows.h>
 #endif // OS_WINDOWS
 
-int init_calyx_os(lua_State * L)
+using namespace calyx;
+
+int init_calyx_os(lua_State* L)
 {
     // Set version information.
     lua_getglobal(L, "calyx");
     lua_pushstring(L, calyx::CALYX_VER);
-    lua_setfield(L, -2, "version");
+    lua_setfield(L, 1, "version");
 
 #ifdef OS_WINDOWS
     OSVERSIONINFOEXA os_version;
@@ -72,5 +73,5 @@ int init_calyx_os(lua_State * L)
 
     lua_setfield(L, -2, "os");
 
-    return 1;
+    return TRUE;
 }
