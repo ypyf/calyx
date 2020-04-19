@@ -1,7 +1,7 @@
--- 创建内建名字空间
+-- 鍒涘缓鍐呭缓鍚嶅瓧绌洪棿
 calyx.event	= {}
 
--- 缺省配置
+-- 缂虹渷閰嶇疆
 calyx.conf = {
 	app = {
 		title = "Calyx 3D",
@@ -26,7 +26,7 @@ calyx.conf = {
 	}
 }
 
--- 载入程序配置
+-- 杞藉叆绋嬪簭閰嶇疆
 function Application(config)
 	for k, v in pairs(config) do
 		calyx.conf.app[k] = v
@@ -34,9 +34,9 @@ function Application(config)
 end
 
 function calyx.init()
-	-- 加入当前路径
+	-- 鍔犲叆褰撳墠璺緞
 	package.path = package.path .. ";?.lua"
-	-- 载入配置文件
+	-- 杞藉叆閰嶇疆鏂囦欢
 	dofile("config.lua")
 end
 
@@ -45,6 +45,6 @@ local function deferErrhand(...)
 	return handler(...)
 end
 
--- 返回后要调用这个函数
--- TODO 错误处理 
+-- 杩斿洖鍚庤璋冪敤杩欎釜鍑芥暟
+-- TODO 閿欒澶勭悊
 return pcall(calyx.init)

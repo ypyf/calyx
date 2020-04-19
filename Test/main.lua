@@ -39,17 +39,18 @@ count1 = 1
 count2 = 1
 count3 = 1
 speed = 0
-step = 9   -- å¥”è·‘é€Ÿåº¦
-posX = 0    -- è§’è‰²ä½ç½®
+step = 9   -- ±¼ÅÜËÙ¶È
+posX = 0    -- ½ÇÉ«Î»ÖÃ
 
 function draw()
     ps.pushMatrix()
     ps.scale(0.5)
     ps.image(box, 1500, 200)
-    calyx.graphics.teapot()
     ps.popMatrix()
 
-    -- æ§åˆ¶åŠ¨ç”»é€Ÿåº¦
+    calyx.graphics.teapot()
+
+    -- ¿ØÖÆ¶¯»­ËÙ¶È
     if speed > 9 then
         count1 = count1 + 1
         count2 = count2 + 1
@@ -64,7 +65,7 @@ function draw()
         end
     end
 
-    -- é‡ç½®åŠ¨ç”»å¸§æŒ‡é’ˆ
+    -- ÖØÖÃ¶¯»­Ö¡Ö¸Õë
     if count1 > 5 then
         count1 = 1
     end
@@ -77,7 +78,7 @@ function draw()
         count3 = 1
     end
 
-    -- ç»˜åˆ¶åŠ¨ç”»
+    -- »æÖÆ¶¯»­
     ps.image(run1[count2], posX, 200)
 
     ps.image(attack1[count1], 300, 500)
@@ -92,7 +93,7 @@ function draw()
     ps.popMatrix()
 
     --pushMatrix()
-	-- å°†å›¾ç‰‡å¹³ç§»
+	-- ½«Í¼Æ¬Æ½ÒÆ
 	--translate(500, 500)
     --imageMode(0)
 	--scale(0.3)
@@ -103,28 +104,28 @@ function draw()
 
     ps.pushMatrix()
     fps = string.format("%0.2f", frameRate)
-    ps.text('å¸§ç‡: '..fps, 10, 170)
+    ps.text('FPS: '..fps, 10, 180)
     ps.popMatrix()
 
     --angle = string.format("%0.2f", x/math.pi*180)
-    --text('æ—‹è½¬è§’åº¦: '..angle, 10, 10)
-    ps.text("æ“ä½œç³»ç»Ÿ: "..calyx.os, 10, 10)
-    ps.text("æ˜¾å¡ä¿¡æ¯: "..calyx.graphics.getVideoCardInfo(), 10, 50)
-    ps.text('å±å¹•å®½åº¦: '..screen.width, 10, 90)
-    ps.text('å±å¹•é«˜åº¦: '..screen.height, 10, 130)
+    --text('Ğı×ª½Ç¶È: '..angle, 10, 10)
+    ps.text("²Ù×÷ÏµÍ³: "..calyx.os, 10, 10)
+    ps.text("ÏÔ¿¨ĞÅÏ¢: "..calyx.graphics.getVideoCardInfo(), 10, 50)
+    ps.text('ÆÁÄ»¿í¶È: '..screen.width, 10, 90)
+    ps.text('ÆÁÄ»¸ß¶È: '..screen.height, 10, 130)
 
     --translate(100, 100)
 
     --pushMatrix()
     --rotate(0.3)
-    --text("æ–‡å­—æ•ˆæœ", 330, 150)
+    --text("ÎÄ×ÖĞ§¹û", 330, 150)
     --popMatrix()
 
-    --ps.text(string.format("ç¬¬ %d å¸§", count2), posX, mouseY)
+    --ps.text(string.format("µÚ %d Ö¡", count2), posX, mouseY)
 end
 
 function update(dt)
-    -- æ›´æ–°å¸§ç‡ç›¸å…³çš„å˜é‡
+    -- ¸üĞÂÖ¡ÂÊÏà¹ØµÄ±äÁ¿
     speed = speed + 1
     x = (x + 0.02)%TWO_PI
 end
@@ -142,6 +143,10 @@ function mouserelease(x, y, button)
 end
 
 triggerPause = true
+
+function wheelmoved(y)
+    printf("%d\n", y);
+end
 
 function keypressed(key, isrepeat)
     io.write(key)
@@ -163,10 +168,10 @@ function keypressed(key, isrepeat)
         print(string.format('set background color %.0f %.0f %.0f', r, g, b))
         ps.background(r, g, b)
     elseif key == 'w' then
-        io.write("åŠ é€Ÿ")
+        io.write("¼ÓËÙ")
         step = step + 10
     elseif key == 's' then
-        io.write("å‡é€Ÿ")
+        io.write("¼õËÙ")
         step = step - 10
     elseif key == 'q' then
         calyx.event.post("quit")
