@@ -1,7 +1,7 @@
 
 include_directories(.)
 
-set(SOURCES "main.cpp" "GameConsole.rc" "calyx.cpp" "Console.cpp" "D3D9Console.cpp" "GameTime.cpp" "MatrixStack.cpp"
+set(SOURCES "main.cpp" "calyx.rc" "calyx.cpp" "Console.cpp" "D3D9Console.cpp" "GameTime.cpp" "MatrixStack.cpp"
     "mylua.cpp" "MyModels.cpp" "stringUtils.cpp" "TexCube.cpp" "win32Utils.cpp")
 
  set(MODULE_SOURCES "modules/modules.cpp" "modules/modules.h"
@@ -18,7 +18,8 @@ link_directories("D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86")
 include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
-add_executable (calyx ${SOURCES} ${MODULE_SOURCES})
+add_executable(calyx WIN32 ${SOURCES} ${MODULE_SOURCES})
+
 target_link_libraries (calyx lua51 d3d9 d3dx9)
 
 set_property(TARGET calyx PROPERTY FOLDER "executables")

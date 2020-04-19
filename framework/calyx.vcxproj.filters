@@ -74,7 +74,7 @@
     <CustomBuild Include="E:\projects\c++\calyx\framework\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="E:\projects\c++\calyx\framework\GameConsole.rc">
+    <ResourceCompile Include="E:\projects\c++\calyx\framework\calyx.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
   </ItemGroup>

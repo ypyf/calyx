@@ -2,6 +2,7 @@
 #include <assert.h>
 //#include <WinInet.h>	// URL
 #include "D3D9Console.h"
+#include "resource.h"
 #include "calyx.h"
 #include "mylua.h"
 #include "MyModels.h"
@@ -423,17 +424,17 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
     WNDCLASSEX wcex;
     ZeroMemory(&wcex, sizeof wcex);
     wcex.cbSize = sizeof wcex;
-    wcex.cbClsExtra = 0;                                          // No Extra Window Data
-    wcex.cbWndExtra = 0;                                          // No Extra Window Data
-    wcex.style = CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC; // Redraw On Size, And Own DC For Window.
-    wcex.hInstance = m_hInstance;                                 // Set The Instance
-    wcex.lpfnWndProc = WndProc;                                   // WndProc Handles Messages
-    wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);                 // Load The Default Icon
-    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);                   // Load The Arrow Pointer
-    wcex.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);     // No Background Required For GL
-    wcex.lpszMenuName = NULL;                                     // We Don't Want A Menu
-    wcex.lpszClassName = window_class_name;                       // Set The Class Name
-    wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    wcex.cbClsExtra = 0;                                            // No Extra Window Data
+    wcex.cbWndExtra = 0;                                            // No Extra Window Data
+    wcex.style = CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC;   // Redraw On Size, And Own DC For Window.
+    wcex.hInstance = m_hInstance;                                   // Set The Instance
+    wcex.lpfnWndProc = WndProc;                                     // WndProc Handles Messages
+    wcex.hIcon = LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON1)); // Load The Default Icon
+    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);                     // Load The Arrow Pointer
+    wcex.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);       // No Background Required For GL
+    wcex.lpszMenuName = NULL;                                       // We Don't Want A Menu
+    wcex.lpszClassName = window_class_name;                         // Set The Class Name
+    wcex.hIconSm = LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
     if (!RegisterClassEx(&wcex)) // Attempt To Register The Window Class
     {
@@ -454,12 +455,12 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
     // 校正窗口大小
     AdjustWindowRectEx(&rect, dwStyle, FALSE, dwExStyle);
 
+    dwStyle |= WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+
     m_hAppWindow = CreateWindowEx(dwExStyle,                    // Extended Style For The Window
                                   window_class_name,            // Class Name
                                   title,                        // Window Title
-                                  dwStyle |                     // Defined Window Style
-                                      WS_CLIPSIBLINGS |         // Required Window Style
-                                      WS_CLIPCHILDREN,          // Required Window Style
+                                  dwStyle,                      // Defined Window Style
                                   window_init_x, window_init_y, // Window Position
                                   rect.right - rect.left,       // Calculate Window Width
                                   rect.bottom - rect.top,       // Calculate Window Height
