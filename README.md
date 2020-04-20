@@ -4,11 +4,11 @@ A Lua 3D Game Engine
 
 ## Prerequisites
 
-1. DirectX 9 SDK installed
+1. DirectX 9 SDK
 
-2. Visual Sutdio 2015 (or higher) installed
+2. Visual Sutdio 2015 (or higher)
 
-3. CMake installed and added the `bin` directory to `PATH`
+3. CMake and add the `bin` directory to `PATH`
 
 ## Building
 
@@ -20,7 +20,7 @@ A Lua 3D Game Engine
     cmake -G "Visual Studio 16 2019" -S . -A Win32
     ```
 
-2. Buil it for `Debug`
+2. Build it for `Debug`
 
     ```shell
     cmake  --build . --config Debug
