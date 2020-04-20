@@ -4,7 +4,7 @@
 using namespace calyx;
 
 #ifdef OS_WINDOWS
-bool Console::InitWindows()
+bool Console::InitOS()
 {
 #if (WINVER >= 0x0605)
     // 改善高分辨率设备的显示效果

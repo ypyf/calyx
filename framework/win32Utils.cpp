@@ -19,7 +19,7 @@ HICON LoadIconEx(HINSTANCE hInstance, LPCWSTR lpIconName, int iconWidth, int ico
     HICON hIcon;
     if (FAILED(::LoadIconWithScaleDown(hInstance, lpIconName, iconWidth, iconHeight, &hIcon)))
     {
-        exit(1);
+        return nullptr;
     }
     return hIcon;
 }

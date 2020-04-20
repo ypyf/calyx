@@ -13,7 +13,7 @@
     <ClCompile Include="E:\projects\c++\calyx\framework\D3D9Console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="E:\projects\c++\calyx\framework\GameTime.cpp">
+    <ClCompile Include="E:\projects\c++\calyx\framework\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="E:\projects\c++\calyx\framework\MatrixStack.cpp">

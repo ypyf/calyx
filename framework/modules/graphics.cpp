@@ -10,8 +10,7 @@ namespace
 int l_get_videocard_info(lua_State *L)
 {
     D3D9Console *console = D3D9Console::GetThis(L);
-    VideoCardInfo info = console->GetVideoCardInfo();
-    lua_pushstring(L, info.Description.c_str());
+    lua_pushstring(L, console->m_d3d9Adapter.Description);
     return 1;
 }
 

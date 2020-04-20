@@ -13,7 +13,7 @@ namespace
 {
 calyx::D3D9Console *console;
 
-const TCHAR window_class_name[] = TEXT("D3D9Game Window CLass");
+const TCHAR window_class_name[] = TEXT("Calyx Window Class");
 
 // 缺省的窗口位置
 const int window_init_x = 200;
@@ -173,12 +173,12 @@ int D3D9Console::Run()
     }
 
     // 调用入口函数
-    lua_getglobal(L, "setup");
-    if (lua_pcall(L, 0, 0, 0))
-    {
-        lua::show_error_message(L);
-        return false;
-    }
+    // lua_getglobal(L, "setup");
+    // if (lua_pcall(L, 0, 0, 0))
+    // {
+    //     lua::show_error_message(L);
+    //     return false;
+    // }
 
     // 创建模型网格
     D3DXCreateTeapot(m_d3d9Device, &m_pTeapotMesh, 0);
@@ -235,10 +235,7 @@ void D3D9Console::Draw()
     }
 
     // 清屏
-    m_d3d9Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, m_bgcolor, 1.0f, 0);
-
-    // 关闭光照
-    m_d3d9Device->SetRenderState(D3DRS_LIGHTING, m_bLight);
+    m_d3d9Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, m_d3dColorBackground, 1.0f, 0);
 
     // 调用绘图方法
     m_d3d9Device->BeginScene();
@@ -286,12 +283,12 @@ void D3D9Console::ReleaseDeviceResources()
 //bool D3D9Console::OnResetDevice()
 //{
 //    m_pSprite->OnResetDevice();
-//    ResetGraphicsState();
+//    SetGraphicsDeviceState();
 //    return true;
 //}
 
 // 设置图形设备状态
-bool D3D9Console::ResetGraphicsState()
+bool D3D9Console::SetGraphicsDeviceState()
 {
     // 创建并设置视图矩阵
     D3DXVECTOR3 eye(0.0f, 6.0f, -10.0f);
@@ -311,7 +308,8 @@ bool D3D9Console::ResetGraphicsState()
     //D3DXMatrixOrthoLH(&proj, 5.0f, 5.0f * aspect, 0.0f, 5.0f);
     m_d3d9Device->SetTransform(D3DTS_PROJECTION, &proj);
 
-    m_d3d9Device->SetRenderState(D3DRS_LIGHTING, TRUE);              // 开启光照
+    // 开启光照
+    m_d3d9Device->SetRenderState(D3DRS_LIGHTING, m_bLight);
     m_d3d9Device->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD); // 线性插值着色
     m_d3d9Device->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);      // 开启单位化法线向量
     m_d3d9Device->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE);  // 开启抗锯齿
@@ -337,7 +335,7 @@ bool D3D9Console::InitGraphics()
     int cy = lua_tointeger(L, -1);
 
     // 创建窗口
-    CreateApplicationWindow(cx, cy);
+    CreateConsoleWindow(cx, cy);
 
     // 显示窗口
     ShowWindow(m_hAppWindow, SW_SHOW);
@@ -349,8 +347,8 @@ bool D3D9Console::InitGraphics()
     if (!AcquireDeviceResources())
         return false;
 
-    // 重置图形设备状态
-    ResetGraphicsState();
+    // 设置图形设备状态
+    SetGraphicsDeviceState();
 
     // 创建精灵
     D3DXCreateSprite(m_d3d9Device, &m_pSprite);
@@ -363,7 +361,7 @@ bool D3D9Console::InitGraphics()
                               CLEARTYPE_QUALITY,  // 该参数对TrueType字体没有影响
                               DEFAULT_PITCH | FF_DONTCARE,
                               TEXT("fixedsys"),
-                              &m_font)))
+                              &m_d3dxFont)))
     {
         return false;
     }
@@ -383,8 +381,9 @@ void D3D9Console::Quit()
 
 int D3D9Console::Init(HINSTANCE hInstance)
 {
+    console = this;
     m_bLight = false;
-    m_bgcolor = d3d::Color::Cornflower; // 缺省背景色
+    m_d3dColorBackground = d3d::Color::Cornflower; // 缺省背景色
     m_hInstance = hInstance;
     m_hAppWindow = NULL;
     m_d3d9 = NULL;
@@ -393,18 +392,15 @@ int D3D9Console::Init(HINSTANCE hInstance)
     m_bSuspended = false;
     m_bDeviceLost = false;
     m_bHandleDeviceLost = true;
-    console = this;
     m_fps = 0;
-    m_pTimer = new GameTime;
+    m_pTimer = new Timer;
 
     if (!m_pTimer->Init())
         return false;
 
-        // 初始化系统配置
-#ifdef OS_WINDOWS
-    if (!InitWindows())
+    // 初始化系统配置
+    if (!InitOS())
         return false;
-#endif
 
     // 初始化Lua并启动脚本
     if (!InitLua())
@@ -419,10 +415,9 @@ int D3D9Console::Init(HINSTANCE hInstance)
     return true;
 }
 
-bool D3D9Console::CreateApplicationWindow(int cx, int cy)
+bool D3D9Console::CreateConsoleWindow(int cx, int cy)
 {
-    WNDCLASSEX wcex;
-    ZeroMemory(&wcex, sizeof wcex);
+    WNDCLASSEX wcex = {};
     wcex.cbSize = sizeof wcex;
     wcex.cbClsExtra = 0;                                            // No Extra Window Data
     wcex.cbWndExtra = 0;                                            // No Extra Window Data
@@ -436,7 +431,7 @@ bool D3D9Console::CreateApplicationWindow(int cx, int cy)
     wcex.lpszClassName = window_class_name;                         // Set The Class Name
     wcex.hIconSm = LoadIcon(m_hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
-    if (!RegisterClassEx(&wcex)) // Attempt To Register The Window Class
+    if (!RegisterClassEx(&wcex))
     {
         MessageBox(NULL, TEXT("Failed To Register The Window Class"), NULL, NULL);
         return false;
@@ -574,8 +569,8 @@ bool D3D9Console::InitDirect3D()
 
 #if 0
     // 设置视口
-    D3DVIEWPORT9 viewport = { 20, 20, 640, 480, 0, 1 };
-    m_pDevice->SetViewport(&viewport);
+    D3DVIEWPORT9 viewport = {0, 0, 640, 480, 0, 1};
+    m_d3d9Device->SetViewport(&viewport);
 #endif
 
     return true;
@@ -583,18 +578,15 @@ bool D3D9Console::InitDirect3D()
 
 void D3D9Console::Shutdown()
 {
-    lua_close(L);
     ReleaseDeviceResources();
     SafeDelete(&m_pTimer);
+    lua_close(L);
 }
 
 D3D9Console *D3D9Console::GetThis(lua_State *L)
 {
     lua_getfield(L, LUA_REGISTRYINDEX, "thisapp");
-    D3D9Console *self = (D3D9Console *)lua_touserdata(L, -1);
-    // TODO throw exception
-    assert(self != NULL);
-    return self;
+    return (D3D9Console *)lua_touserdata(L, -1);
 }
 
 D3D9Console::operator HWND() const
@@ -635,7 +627,7 @@ void D3D9Console::TryResetDevice()
             if (SUCCEEDED(hr = m_d3d9Device->Reset(&m_d3dPresent)))
             {
                 m_pSprite->OnResetDevice();
-                this->ResetGraphicsState();
+                this->SetGraphicsDeviceState();
             }
         }
         //else if (D3DERR_DRIVERINTERNALERROR == hr)
@@ -665,7 +657,7 @@ LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     {
         //m_width = LOWORD(lParam);
         //m_height = HIWORD(lParam);
-        //this->ResetGraphicsState();
+        //this->SetGraphicsDeviceState();
     }
     break;
     case WM_LBUTTONDOWN:
@@ -719,16 +711,6 @@ LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     }
 
     return result;
-}
-
-VideoCardInfo D3D9Console::GetVideoCardInfo() const
-{
-    VideoCardInfo info;
-    info.Description = m_d3d9Adapter.Description;
-    info.DeviceName = m_d3d9Adapter.DeviceName;
-    info.Driver = m_d3d9Adapter.Driver;
-
-    return info;
 }
 
 double D3D9Console::GetFrameRate() const

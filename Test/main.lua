@@ -24,16 +24,15 @@ function loadImageRes(template, n)
     return res
 end
 
-function setup()
-    printf("hello world\n")
-    x = 0.1
-    --ps.background(108, 108, 208)
-    --ps.background(30, 82, 150)
-    attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
-    run1 = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
-    stand1 = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
-    box = loadImage('res/box.png')
-end
+printf("hello world\n")
+x = 0.1
+--ps.background(108, 108, 208)
+--ps.background(30, 82, 150)
+attack1 = loadImageRes('zs_001041_Attack_02_00%02d.png', 5)
+run1 = loadImageRes('sz_001006_Run_02_00%02d.png', 8)
+stand1 = loadImageRes('sz_001006_Prepare_02_00%02d.png', 4)
+box = loadImage('res/box.png')
+
 
 count1 = 1
 count2 = 1

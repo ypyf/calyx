@@ -1,7 +1,7 @@
 
 include_directories(.)
 
-set(SOURCES "main.cpp" "calyx.rc" "calyx.cpp" "Console.cpp" "D3D9Console.cpp" "GameTime.cpp" "MatrixStack.cpp"
+set(SOURCES "main.cpp" "calyx.rc" "calyx.cpp" "Console.cpp" "D3D9Console.cpp" "Timer.cpp" "MatrixStack.cpp"
     "mylua.cpp" "MyModels.cpp" "stringUtils.cpp" "TexCube.cpp" "win32Utils.cpp")
 
  set(MODULE_SOURCES "modules/modules.cpp" "modules/modules.h"

@@ -1,14 +1,9 @@
-#ifndef __d3d9_console_h__
-#define __d3d9_console_h__
-
 #pragma once
-
-#define _CRT_NON_CONFORMING_SWPRINTFS
 
 #include <windows.h> // This has to be included before any D3d header file
 #include <TCHAR.h>
 
-#include "GameTime.h"
+#include "Timer.h"
 #include "stringUtils.h"
 #include "basic_types.h"
 #include "keyboard.h"
@@ -21,14 +16,6 @@ struct lua_State;
 namespace calyx
 {
 
-struct VideoCardInfo
-{
-    std::string Driver;
-    std::string DeviceName;
-    std::string Description;
-    std::string DriverVersion;
-};
-
 class D3D9Console : public Console
 {
 public:
@@ -39,7 +26,7 @@ public:
     int Run();
 
     // create the app window
-    bool CreateApplicationWindow(int cx, int cy);
+    bool CreateConsoleWindow(int cx, int cy);
 
     // Framework methods
     virtual int Init(HINSTANCE hInstance);
@@ -52,17 +39,16 @@ public:
     // 从lua虚拟机获取控制台实例
     static D3D9Console *GetThis(lua_State *L);
 
-    // 读取显卡信息
-    VideoCardInfo GetVideoCardInfo() const;
-
     double GetFrameRate() const;
 
-    ID3DXFont *m_font;
+    ID3DXFont *m_d3dxFont;
     MatrixStack m_matrixStack;
     IDirect3DDevice9 *m_d3d9Device;
     ID3DXSprite *m_pSprite;
-    D3DCOLOR m_bgcolor;       // 背景色
-    ID3DXMesh *m_pTeapotMesh; // 茶壶网格
+    D3DCOLOR m_d3dColorBackground; // 背景色
+    ID3DXMesh *m_pTeapotMesh;      // 茶壶网格
+    // 显卡信息
+    D3DADAPTER_IDENTIFIER9 m_d3d9Adapter;
 
     operator HWND() const;
 
@@ -105,7 +91,7 @@ protected:
     // Initialize graphics device
 
     bool InitDirect3D();
-    bool ResetGraphicsState();
+    bool SetGraphicsDeviceState();
     bool InitGraphics();
 
     // 设置窗口大小
@@ -113,12 +99,11 @@ protected:
 
 private:
     double m_fps;
-    GameTime *m_pTimer;
+    Timer *m_pTimer;
     //D3DXMATRIX view;
 
-    // lua script
+    // lua vm
     lua_State *L;
-    //int m_refThis;  // 保存在Lua注册表中的this指针的引用
 
     bool m_bLight; // 开启光照
     ID3DXMesh *m_pMesh;
@@ -127,10 +112,6 @@ private:
     D3DMATERIAL9 m_material;
     IDirect3DVertexBuffer9 *m_pVB; // 顶点缓存
     IDirect3DIndexBuffer9 *m_pIB;  // 索引缓存
-    // 显卡信息
-    D3DADAPTER_IDENTIFIER9 m_d3d9Adapter;
 };
 
 } // namespace calyx
-
-#endif // __d3d9_console_h__

@@ -6,7 +6,6 @@
 #if defined(WIN32) || defined(_WIN32)
 #include <windows.h>
 #define OS_WINDOWS 1
-#define WIN32_LEAN_AND_MEAN
 #define CALYX_EXPORT __declspec(dllexport)
 #else
 #define CALYX_EXPORT

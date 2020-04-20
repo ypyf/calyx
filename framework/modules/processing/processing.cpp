@@ -149,7 +149,7 @@ int l_text(lua_State *L)
     D3D9Console *console = D3D9Console::GetThis(L);
     console->m_pSprite->SetTransform(console->m_matrixStack.top());
     console->m_pSprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_SORT_DEPTH_FRONTTOBACK);
-    console->m_font->DrawText(console->m_pSprite, unicodeStr, -1, &rc, DT_NOCLIP, d3d::Color::White);
+    console->m_d3dxFont->DrawText(console->m_pSprite, unicodeStr, -1, &rc, DT_NOCLIP, d3d::Color::White);
     console->m_pSprite->End();
     free(unicodeStr);
 
@@ -278,7 +278,7 @@ int l_background(lua_State *L)
         //int red = (rgb >> 16) & 0xFF;
         //int green = (rgb >> 8) & 0xFF;
         //int blue = rgb & 0xFF;
-        console->m_bgcolor = D3DCOLOR_ARGB(255, v, v, v);
+        console->m_d3dColorBackground = D3DCOLOR_ARGB(255, v, v, v);
     }
     else if (n == 3)
     {
@@ -286,7 +286,7 @@ int l_background(lua_State *L)
         int v1 = (int)luaL_optnumber(L, args++, 0);
         int v2 = (int)luaL_optnumber(L, args++, 0);
         int v3 = (int)luaL_optnumber(L, args++, 0);
-        console->m_bgcolor = D3DCOLOR_ARGB(255, v1, v2, v3);
+        console->m_d3dColorBackground = D3DCOLOR_ARGB(255, v1, v2, v3);
     }
     else if (n >= 4)
     {
@@ -295,7 +295,7 @@ int l_background(lua_State *L)
         int v2 = (int)luaL_optnumber(L, args++, 0);
         int v3 = (int)luaL_optnumber(L, args++, 0);
         int alpha = (int)luaL_optnumber(L, args++, 0);
-        console->m_bgcolor = D3DCOLOR_ARGB(alpha, v1, v2, v3);
+        console->m_d3dColorBackground = D3DCOLOR_ARGB(alpha, v1, v2, v3);
     }
 
     return 0;

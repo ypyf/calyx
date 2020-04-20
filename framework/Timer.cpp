@@ -1,20 +1,20 @@
-#include "GameTime.h"
+#include "Timer.h"
 #include <windows.h>
 
 using namespace calyx;
 
-GameTime::GameTime()
+Timer::Timer()
     : _countsPerSec(0),
       _secPerCount(0),
       _prevCounts(0)
 {
 }
 
-GameTime::~GameTime()
+Timer::~Timer()
 {
 }
 
-int GameTime::Init()
+int Timer::Init()
 {
     if (!QueryPerformanceFrequency((LARGE_INTEGER *)&_countsPerSec))
         return false; // 系统不支持高精度计数器
@@ -23,18 +23,18 @@ int GameTime::Init()
     return true;
 }
 
-void GameTime::Start()
+void Timer::Start()
 {
     QueryPerformanceCounter((LARGE_INTEGER *)&_prevCounts);
 }
 
-void GameTime::Reset()
+void Timer::Reset()
 {
     _prevCounts = 0;
 }
 
 // 返回在调用Start以后所过去的秒数
-float GameTime::Elapsed()
+float Timer::Elapsed()
 {
     __int64 curCounts;
     QueryPerformanceCounter((LARGE_INTEGER *)&curCounts);

@@ -3,11 +3,11 @@
 namespace calyx
 {
 
-class GameTime
+class Timer
 {
 public:
-    GameTime();
-    ~GameTime();
+    Timer();
+    ~Timer();
 
     int Init();
     void Start();

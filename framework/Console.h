@@ -9,7 +9,7 @@ class Console
 {
 public:
 #ifdef OS_WINDOWS
-    bool InitWindows();
+    bool InitOS();
 #endif
 };
 } // namespace calyx
