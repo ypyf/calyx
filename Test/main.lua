@@ -38,18 +38,18 @@ count1 = 1
 count2 = 1
 count3 = 1
 speed = 0
-step = 9   -- ±¼ÅÜËÙ¶È
-posX = 0    -- ½ÇÉ«Î»ÖÃ
+step = 9   -- å¥”è·‘é€Ÿåº¦
+posX = 0    -- è§’è‰²ä½ç½®
 
 function draw()
     ps.pushMatrix()
     ps.scale(0.5)
-    ps.image(box, 1500, 200)
+    -- ps.image(box, 1500, 200)
     ps.popMatrix()
 
     calyx.graphics.teapot()
 
-    -- ¿ØÖÆ¶¯»­ËÙ¶È
+    -- æ§åˆ¶åŠ¨ç”»é€Ÿåº¦
     if speed > 9 then
         count1 = count1 + 1
         count2 = count2 + 1
@@ -64,7 +64,7 @@ function draw()
         end
     end
 
-    -- ÖØÖÃ¶¯»­Ö¡Ö¸Õë
+    -- é‡ç½®åŠ¨ç”»å¸§æŒ‡é’ˆ
     if count1 > 5 then
         count1 = 1
     end
@@ -77,7 +77,7 @@ function draw()
         count3 = 1
     end
 
-    -- »æÖÆ¶¯»­
+    -- ç»˜åˆ¶åŠ¨ç”»
     ps.image(run1[count2], posX, 200)
 
     ps.image(attack1[count1], 300, 500)
@@ -92,7 +92,7 @@ function draw()
     ps.popMatrix()
 
     --pushMatrix()
-	-- ½«Í¼Æ¬Æ½ÒÆ
+	-- å°†å›¾ç‰‡å¹³ç§»
 	--translate(500, 500)
     --imageMode(0)
 	--scale(0.3)
@@ -107,24 +107,24 @@ function draw()
     ps.popMatrix()
 
     --angle = string.format("%0.2f", x/math.pi*180)
-    --text('Ğı×ª½Ç¶È: '..angle, 10, 10)
-    ps.text("²Ù×÷ÏµÍ³: "..calyx.os, 10, 10)
-    ps.text("ÏÔ¿¨ĞÅÏ¢: "..calyx.graphics.getVideoCardInfo(), 10, 50)
-    ps.text('ÆÁÄ»¿í¶È: '..screen.width, 10, 90)
-    ps.text('ÆÁÄ»¸ß¶È: '..screen.height, 10, 130)
+    --text('æ—‹è½¬è§’åº¦: '..angle, 10, 10)
+    ps.text("æ“ä½œç³»ç»Ÿ: "..calyx.os, 10, 10)
+    ps.text("æ˜¾å¡ä¿¡æ¯: "..calyx.graphics.getVideoCardInfo(), 10, 50)
+    ps.text('å±å¹•å®½åº¦: '..screen.width, 10, 90)
+    ps.text('å±å¹•é«˜åº¦: '..screen.height, 10, 130)
 
     --translate(100, 100)
 
     --pushMatrix()
     --rotate(0.3)
-    --text("ÎÄ×ÖĞ§¹û", 330, 150)
+    --text("æ–‡å­—æ•ˆæœ", 330, 150)
     --popMatrix()
 
-    --ps.text(string.format("µÚ %d Ö¡", count2), posX, mouseY)
+    --ps.text(string.format("ç¬¬ %d å¸§", count2), posX, mouseY)
 end
 
 function update(dt)
-    -- ¸üĞÂÖ¡ÂÊÏà¹ØµÄ±äÁ¿
+    -- æ›´æ–°å¸§ç‡ç›¸å…³çš„å˜é‡
     speed = speed + 1
     x = (x + 0.02)%TWO_PI
 end
@@ -143,8 +143,15 @@ end
 
 triggerPause = true
 
-function wheelmoved(y)
-    printf("%d\n", y);
+cameraZ = 1.0
+
+function wheelmoved(direction, lines)
+    if direction then
+        cameraZ = cameraZ + lines*0.1
+    else
+         cameraZ = cameraZ - lines*0.1
+    end
+    calyx.graphics.setCameraZ(cameraZ)
 end
 
 function keypressed(key, isrepeat)
@@ -167,10 +174,10 @@ function keypressed(key, isrepeat)
         print(string.format('set background color %.0f %.0f %.0f', r, g, b))
         ps.background(r, g, b)
     elseif key == 'w' then
-        io.write("¼ÓËÙ")
+        io.write("åŠ é€Ÿ")
         step = step + 10
     elseif key == 's' then
-        io.write("¼õËÙ")
+        io.write("å‡é€Ÿ")
         step = step - 10
     elseif key == 'q' then
         calyx.event.post("quit")

@@ -7,6 +7,7 @@
 #include "mylua.h"
 #include "MyModels.h"
 #include "modules/modules.h"
+#include "win32Utils.h"
 #include <DirectXMath.h>
 
 namespace
@@ -379,12 +380,12 @@ void D3D9Console::Quit()
     ::PostQuitMessage(0);
 }
 
-int D3D9Console::Init(HINSTANCE hInstance)
+int D3D9Console::Init()
 {
     console = this;
     m_bLight = false;
     m_d3dColorBackground = d3d::Color::Cornflower; // 缺省背景色
-    m_hInstance = hInstance;
+    m_hInstance = ::GetModuleHandle(0);
     m_hAppWindow = NULL;
     m_d3d9 = NULL;
     m_d3d9Device = NULL;
@@ -394,6 +395,7 @@ int D3D9Console::Init(HINSTANCE hInstance)
     m_bHandleDeviceLost = true;
     m_fps = 0;
     m_pTimer = new Timer;
+    m_mouseScrollDeltaPerLine = MouseScrollDeltaPerLine();
 
     if (!m_pTimer->Init())
         return false;
@@ -650,6 +652,9 @@ LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
     switch (msg)
     {
+    case WM_SETTINGCHANGE:
+        m_mouseScrollDeltaPerLine = MouseScrollDeltaPerLine();
+        break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
@@ -687,9 +692,11 @@ LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_MOUSEWHEEL:
     {
         int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+        int lines = abs(delta) / m_mouseScrollDeltaPerLine;
         lua_getglobal(L, "wheelmoved");
-        lua_pushinteger(L, delta);
-        lua_pcall(L, 1, 0, 0);
+        lua_pushboolean(L, delta > 0);
+        lua_pushnumber(L, lines);
+        lua_pcall(L, 2, 0, 0);
     }
     break;
     case WM_INPUT:
@@ -716,4 +723,15 @@ LRESULT D3D9Console::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 double D3D9Console::GetFrameRate() const
 {
     return m_fps;
+}
+
+void D3D9Console::SetCameraAtZ(double z)
+{
+    D3DXVECTOR3 eye(0, z, z);
+    D3DXVECTOR3 target(0, 0, 0);
+    D3DXVECTOR3 up(0, 1, 0);
+
+    D3DXMATRIXA16 view;
+    D3DXMatrixLookAtLH(&view, &eye, &target, &up);
+    m_d3d9Device->SetTransform(D3DTS_VIEW, &view);
 }

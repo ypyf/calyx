@@ -140,7 +140,7 @@ int l_text(lua_State *L)
 
     int args = 1;
     const char *utf8Str = luaL_optstring(L, args++, "");
-    TCHAR *unicodeStr = ansi_to_unicode(utf8Str);
+    TCHAR *unicodeStr = utf8_to_unicode(utf8Str);
     rc.left = (int)luaL_optnumber(L, args++, 0);
     rc.top = (int)luaL_optnumber(L, args++, 0);
 

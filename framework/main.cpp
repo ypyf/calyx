@@ -2,11 +2,11 @@
 
 using namespace calyx;
 
-int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
+int main(int argc, char *argv[])
 {
     SetCurrentDirectory(TEXT("../Test"));
     D3D9Console console;
-    if (!console.Init(hInstance))
+    if (!console.Init())
     {
         MessageBox(NULL, TEXT("Failed to initialize application"), NULL, NULL);
         exit(1);

@@ -46,12 +46,23 @@ int l_is_wireframe(lua_State *L)
     return 1;
 }
 
+int l_set_camera_z(lua_State *L)
+{
+    if (lua_gettop(L) == 1 && lua_isnumber(L, 1))
+    {
+        D3D9Console *console = D3D9Console::GetThis(L);
+        console->SetCameraAtZ(lua_tonumber(L, 1));
+    }
+    return 0;
+}
+
 const struct luaL_Reg exports[] =
     {
         {"getVideoCardInfo", l_get_videocard_info},
         {"teapot", l_teapot},
         {"setWireframe", l_set_wireframe},
         {"isWireframe", l_is_wireframe},
+        {"setCameraZ", l_set_camera_z},
         {NULL, NULL}};
 } // namespace
 

@@ -29,12 +29,16 @@ public:
     bool CreateConsoleWindow(int cx, int cy);
 
     // Framework methods
-    virtual int Init(HINSTANCE hInstance);
+    virtual int Init();
     virtual void Update(float dt);
     virtual void Draw();
     virtual LRESULT WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
     virtual void Pause(bool status);
     virtual void Quit();
+
+    // 设置摄像机
+    // TODO 抽象出Camera对象
+    void SetCameraAtZ(double z);
 
     // 从lua虚拟机获取控制台实例
     static D3D9Console *GetThis(lua_State *L);
@@ -47,6 +51,7 @@ public:
     ID3DXSprite *m_pSprite;
     D3DCOLOR m_d3dColorBackground; // 背景色
     ID3DXMesh *m_pTeapotMesh;      // 茶壶网格
+
     // 显卡信息
     D3DADAPTER_IDENTIFIER9 m_d3d9Adapter;
 
@@ -77,8 +82,12 @@ protected:
     bool m_bHandleDeviceLost;
     bool m_bDeviceLost;
 
+    // 鼠标滚轮一次滚动的行数
+    int m_mouseScrollDeltaPerLine;
+
     // Calculate FPS
-    void CalculateFPS(float dt);
+    void
+    CalculateFPS(float dt);
 
     // Shutdown the app
 

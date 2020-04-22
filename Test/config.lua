@@ -1,7 +1,7 @@
 -- application config file
 Application {
     version    = "1.0.2",
-    author     = "Yan Feng",
+    author     = "System",
     title      = "Calyx",
     console    = false,
     width      = 1600,

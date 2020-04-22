@@ -18,7 +18,7 @@ link_directories("D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86")
 include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
-add_executable(calyx WIN32 ${SOURCES} ${MODULE_SOURCES})
+add_executable(calyx ${SOURCES} ${MODULE_SOURCES})
 
 target_link_libraries (calyx lua51 d3d9 d3dx9)
 
