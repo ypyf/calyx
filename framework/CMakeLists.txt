@@ -11,8 +11,8 @@ set(SOURCES "main.cpp" "calyx.rc" "calyx.cpp" "Console.cpp" "D3D9Console.cpp" "T
     "modules/graphics.cpp" "modules/mouse.cpp" "modules/os.cpp")
 
 # DirectX SDK
-include_directories("D:/Dev/Microsoft DirectX SDK (June 2010)/Include")
-link_directories("D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86")
+include_directories($ENV{DXSDK_DIR}/Include)
+link_directories($ENV{DXSDK_DIR}/Lib/x86)
 
 # Lua library
 include_directories(${CMAKE_SOURCE_DIR}/include)

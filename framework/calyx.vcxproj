@@ -86,7 +86,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -106,10 +106,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_UNICODE;UNICODE;WIN32_LEAN_AND_MEAN;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -118,7 +118,7 @@
     </Midl>
     <Link>
       <AdditionalDependencies>lua51.lib;d3d9.lib;d3dx9.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -132,7 +132,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -152,10 +152,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;UNICODE;WIN32_LEAN_AND_MEAN;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -164,7 +164,7 @@
     </Midl>
     <Link>
       <AdditionalDependencies>lua51.lib;d3d9.lib;d3dx9.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -178,7 +178,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -198,10 +198,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;UNICODE;WIN32_LEAN_AND_MEAN;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -210,7 +210,7 @@
     </Midl>
     <Link>
       <AdditionalDependencies>lua51.lib;d3d9.lib;d3dx9.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -224,7 +224,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -243,10 +243,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_UNICODE;UNICODE;WIN32_LEAN_AND_MEAN;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\Dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\projects\c++\calyx\framework\.;D:\dev\Microsoft DirectX SDK (June 2010)\Include;E:\projects\c++\calyx\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -255,7 +255,7 @@
     </Midl>
     <Link>
       <AdditionalDependencies>lua51.lib;d3d9.lib;d3dx9.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/Dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86;D:/dev/Microsoft DirectX SDK (June 2010)/Lib/x86/$(Configuration);E:/projects/c++/calyx/lib;E:/projects/c++/calyx/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -271,7 +271,7 @@
     <CustomBuild Include="E:\projects\c++\calyx\framework\CMakeLists.txt">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule E:/projects/c++/calyx/framework/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-D:\Dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
+D:\dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -284,7 +284,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule E:/projects/c++/calyx/framework/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-D:\Dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
+D:\dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -297,7 +297,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule E:/projects/c++/calyx/framework/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
-D:\Dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
+D:\dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -310,7 +310,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
       <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule E:/projects/c++/calyx/framework/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
-D:\Dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
+D:\dev\CMake\bin\cmake.exe -SE:/projects/c++/calyx -BE:/projects/c++/calyx --check-stamp-file E:/projects/c++/calyx/framework/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone

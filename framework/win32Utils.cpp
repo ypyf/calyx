@@ -28,7 +28,7 @@ HICON LoadIconEx(HINSTANCE hInstance, LPCWSTR lpIconName, int iconWidth, int ico
 int MouseScrollDeltaPerLine()
 {
     int scrolllines;
-    SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &scrolllines, 0);
+    ::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &scrolllines, 0);
     return scrolllines ? WHEEL_DELTA / scrolllines : 0;
 }
 
